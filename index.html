@@ -1,1 +1,136 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recetas Deliciosas</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>🍳 Recetas Caseras</h1>
+            <p>Descubre sabores increíbles en tu cocina</p>
+        </div>
+    </header>
 
+    <nav>
+        <div class="container">
+            <ul>
+                <li><a href="#entradas">Entradas</a></li>
+                <li><a href="#principales">Platos Principales</a></li>
+                <li><a href="#postres">Postres</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="container">
+        <section id="entradas" class="recipe-section">
+            <h2>🥗 Entradas</h2>
+            <div class="recipe-card">
+                <img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" alt="Ensalada César">
+                <div class="recipe-content">
+                    <h3>Ensalada César Clásica</h3>
+                    <div class="recipe-info">
+                        <span>⏱️ 15 min</span>
+                        <span>👥 2 personas</span>
+                        <span>⭐ Fácil</span>
+                    </div>
+                    <h4>Ingredientes:</h4>
+                    <ul>
+                        <li>1 lechuga romana</li>
+                        <li>50g de queso parmesano</li>
+                        <li>100g de pollo a la plancha</li>
+                        <li>2 rebanadas de pan</li>
+                        <li>3 cucharadas de aderezo césar</li>
+                    </ul>
+                    <h4>Preparación:</h4>
+                    <ol>
+                        <li>Lavar y cortar la lechuga en trozos</li>
+                        <li>Dorar el pan en el horno para hacer crutones</li>
+                        <li>Cocinar el pollo a la plancha y cortar en tiras</li>
+                        <li>Mezclar todos los ingredientes y añadir el aderezo</li>
+                        <li>Rallar queso parmesano por encima</li>
+                    </ol>
+                    <button class="favorite-btn" onclick="toggleFavorite(this)">❤️ Añadir a Favoritos</button>
+                </div>
+            </div>
+        </section>
+
+        <section id="principales" class="recipe-section">
+            <h2>🍝 Platos Principales</h2>
+            <div class="recipe-card">
+                <img src="https://images.unsplash.com/photo-1551183053-bf91a1d81141?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" alt="Lasagna">
+                <div class="recipe-content">
+                    <h3>Lasaña de Carne</h3>
+                    <div class="recipe-info">
+                        <span>⏱️ 1 hora 30 min</span>
+                        <span>👥 6 personas</span>
+                        <span>⭐ Medio</span>
+                    </div>
+                    <h4>Ingredientes:</h4>
+                    <ul>
+                        <li>12 láminas de lasaña</li>
+                        <li>500g de carne molida</li>
+                        <li>1 cebolla picada</li>
+                        <li>800g de salsa de tomate</li>
+                        <li>500g de queso mozzarella</li>
+                        <li>200g de queso ricotta</li>
+                    </ul>
+                    <h4>Preparación:</h4>
+                    <ol>
+                        <li>Saltear la cebolla y añadir la carne hasta dorar</li>
+                        <li>Agregar la salsa de tomate y cocinar 20 minutos</li>
+                        <li>En un molde, alternar capas de láminas, carne y quesos</li>
+                        <li>Hornear a 180°C por 45 minutos</li>
+                        <li>Dejar reposar 10 minutos antes de servir</li>
+                    </ol>
+                    <button class="favorite-btn" onclick="toggleFavorite(this)">❤️ Añadir a Favoritos</button>
+                </div>
+            </div>
+        </section>
+
+        <section id="postres" class="recipe-section">
+            <h2>🍰 Postres</h2>
+            <div class="recipe-card">
+                <img src="https://images.unsplash.com/photo-1565958011703-44f9829ba187?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" alt="Brownie">
+                <div class="recipe-content">
+                    <h3>Brownie de Chocolate</h3>
+                    <div class="recipe-info">
+                        <span>⏱️ 40 min</span>
+                        <span>👥 8 personas</span>
+                        <span>⭐ Fácil</span>
+                    </div>
+                    <h4>Ingredientes:</h4>
+                    <ul>
+                        <li>200g de chocolate negro</li>
+                        <li>150g de mantequilla</li>
+                        <li>3 huevos</li>
+                        <li>200g de azúcar</li>
+                        <li>100g de harina</li>
+                        <li>100g de nueces picadas</li>
+                    </ul>
+                    <h4>Preparación:</h4>
+                    <ol>
+                        <li>Derretir chocolate y mantequilla a baño maría</li>
+                        <li>Batir huevos con azúcar hasta espumar</li>
+                        <li>Mezclar con el chocolate derretido</li>
+                        <li>Añadir harina y nueces, mezclar suavemente</li>
+                        <li>Hornear a 180°C por 25-30 minutos</li>
+                    </ol>
+                    <button class="favorite-btn" onclick="toggleFavorite(this)">❤️ Añadir a Favoritos</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>© 2024 Recetas Caseras - Hecho con ❤️ para amantes de la cocina</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
