@@ -3,131 +3,250 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Recetas Deliciosas</title>
+    <title>🍳 Recetas Pro :V</title>
     <link rel="stylesheet" href="styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
+    <!-- Loading Screen -->
+    <div id="loading" class="loading">
+        <div class="loader">
+            <div class="utensils">
+                <i class="fas fa-utensils spin"></i>
+            </div>
+            <p>Cargando recetas deliciosas...</p>
+        </div>
+    </div>
+
+    <!-- Header con modo oscuro -->
     <header>
         <div class="container">
-            <h1>🍳 Recetas Caseras</h1>
-            <p>Descubre sabores increíbles en tu cocina</p>
+            <div class="header-content">
+                <div class="logo">
+                    <h1>🍳 Recetas Pro <span class="emoji">:V</span></h1>
+                    <p>¡Cocina como un chef! :V</p>
+                </div>
+                <div class="header-controls">
+                    <button id="darkModeToggle" class="mode-btn">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                    <button id="searchToggle" class="search-btn">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Barra de búsqueda -->
+            <div id="searchBar" class="search-bar hidden">
+                <input type="text" id="searchInput" placeholder="🔍 Buscar recetas... (ej: pollo, postre, fácil)">
+                <button id="searchBtn"><i class="fas fa-search"></i></button>
+            </div>
         </div>
     </header>
 
+    <!-- Navegación mejorada -->
     <nav>
         <div class="container">
             <ul>
-                <li><a href="#entradas">Entradas</a></li>
-                <li><a href="#principales">Platos Principales</a></li>
-                <li><a href="#postres">Postres</a></li>
+                <li><a href="#entradas" class="nav-link"><i class="fas fa-leaf"></i> Entradas</a></li>
+                <li><a href="#principales" class="nav-link"><i class="fas fa-utensils"></i> Principales</a></li>
+                <li><a href="#postres" class="nav-link"><i class="fas fa-ice-cream"></i> Postres</a></li>
+                <li><a href="#bebidas" class="nav-link"><i class="fas fa-glass-martini"></i> Bebidas</a></li>
+                <li><a href="#favoritos" class="nav-link"><i class="fas fa-heart"></i> Favoritos</a></li>
             </ul>
         </div>
     </nav>
 
+    <!-- Contador de recetas -->
+    <div class="stats-bar">
+        <div class="container">
+            <div class="stats">
+                <span id="totalRecipes">📊 Total recetas: 0</span>
+                <span id="favoriteCount">❤️ Favoritos: 0</span>
+                <span id="cookingTime">⏱️ Tiempo promedio: 0min</span>
+            </div>
+        </div>
+    </div>
+
     <main class="container">
+        <!-- Sección de Entradas -->
         <section id="entradas" class="recipe-section">
-            <h2>🥗 Entradas</h2>
-            <div class="recipe-card">
-                <img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" alt="Ensalada César">
-                <div class="recipe-content">
-                    <h3>Ensalada César Clásica</h3>
-                    <div class="recipe-info">
-                        <span>⏱️ 15 min</span>
-                        <span>👥 2 personas</span>
-                        <span>⭐ Fácil</span>
+            <h2><i class="fas fa-leaf"></i> 🥗 Entradas Frescas</h2>
+            <div class="recipes-grid">
+                <!-- Receta 1 -->
+                <div class="recipe-card" data-category="entrada" data-time="15" data-difficulty="facil">
+                    <div class="card-header">
+                        <img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="Ensalada César">
+                        <div class="card-badge facil">Fácil :V</div>
+                        <button class="quick-view" onclick="quickView(this)"><i class="fas fa-eye"></i></button>
                     </div>
-                    <h4>Ingredientes:</h4>
-                    <ul>
-                        <li>1 lechuga romana</li>
-                        <li>50g de queso parmesano</li>
-                        <li>100g de pollo a la plancha</li>
-                        <li>2 rebanadas de pan</li>
-                        <li>3 cucharadas de aderezo césar</li>
-                    </ul>
-                    <h4>Preparación:</h4>
-                    <ol>
-                        <li>Lavar y cortar la lechuga en trozos</li>
-                        <li>Dorar el pan en el horno para hacer crutones</li>
-                        <li>Cocinar el pollo a la plancha y cortar en tiras</li>
-                        <li>Mezclar todos los ingredientes y añadir el aderezo</li>
-                        <li>Rallar queso parmesano por encima</li>
-                    </ol>
-                    <button class="favorite-btn" onclick="toggleFavorite(this)">❤️ Añadir a Favoritos</button>
+                    <div class="recipe-content">
+                        <h3>Ensalada César Pro</h3>
+                        <div class="recipe-meta">
+                            <span><i class="fas fa-clock"></i> 15min</span>
+                            <span><i class="fas fa-users"></i> 2 personas</span>
+                            <span><i class="fas fa-fire"></i> 180cal</span>
+                        </div>
+                        <p class="recipe-desc">La clásica ensalada con un toque gourmet que te volará la cabeza :V</p>
+                        <div class="recipe-tags">
+                            <span class="tag">🥬 Vegetariano</span>
+                            <span class="tag">⚡ Rápido</span>
+                            <span class="tag">🍴 Saludable</span>
+                        </div>
+                        <div class="card-actions">
+                            <button class="btn-favorite" onclick="toggleFavorite(this)">
+                                <i class="far fa-heart"></i>
+                            </button>
+                            <button class="btn-cook" onclick="startCooking(this)">
+                                <i class="fas fa-play"></i> Cocinar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Receta 2 -->
+                <div class="recipe-card" data-category="entrada" data-time="25" data-difficulty="medio">
+                    <div class="card-header">
+                        <img src="https://images.unsplash.com/photo-1482049016688-2d3e1b311543?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="Bruschetta">
+                        <div class="card-badge medio">Medio</div>
+                        <button class="quick-view" onclick="quickView(this)"><i class="fas fa-eye"></i></button>
+                    </div>
+                    <div class="recipe-content">
+                        <h3>Bruschetta Italiana</h3>
+                        <div class="recipe-meta">
+                            <span><i class="fas fa-clock"></i> 25min</span>
+                            <span><i class="fas fa-users"></i> 4 personas</span>
+                            <span><i class="fas fa-fire"></i> 220cal</span>
+                        </div>
+                        <p class="recipe-desc">Pan crujiente con tomate fresco y albahaca. ¡Sabor italiano garantizado! :V</p>
+                        <div class="recipe-tags">
+                            <span class="tag">🍅 Vegetariano</span>
+                            <span class="tag">🇮🇹 Italiano</span>
+                            <span class="tag">🎉 Fiesta</span>
+                        </div>
+                        <div class="card-actions">
+                            <button class="btn-favorite" onclick="toggleFavorite(this)">
+                                <i class="far fa-heart"></i>
+                            </button>
+                            <button class="btn-cook" onclick="startCooking(this)">
+                                <i class="fas fa-play"></i> Cocinar
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
 
+        <!-- Sección de Platos Principales -->
         <section id="principales" class="recipe-section">
-            <h2>🍝 Platos Principales</h2>
-            <div class="recipe-card">
-                <img src="https://images.unsplash.com/photo-1551183053-bf91a1d81141?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" alt="Lasagna">
-                <div class="recipe-content">
-                    <h3>Lasaña de Carne</h3>
-                    <div class="recipe-info">
-                        <span>⏱️ 1 hora 30 min</span>
-                        <span>👥 6 personas</span>
-                        <span>⭐ Medio</span>
+            <h2><i class="fas fa-utensils"></i> 🍝 Platos Principales Épicos</h2>
+            <div class="recipes-grid">
+                <!-- Receta 1 -->
+                <div class="recipe-card" data-category="principal" data-time="45" data-difficulty="medio">
+                    <div class="card-header">
+                        <img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="Pizza">
+                        <div class="card-badge medio">Medio</div>
+                        <button class="quick-view" onclick="quickView(this)"><i class="fas fa-eye"></i></button>
                     </div>
-                    <h4>Ingredientes:</h4>
-                    <ul>
-                        <li>12 láminas de lasaña</li>
-                        <li>500g de carne molida</li>
-                        <li>1 cebolla picada</li>
-                        <li>800g de salsa de tomate</li>
-                        <li>500g de queso mozzarella</li>
-                        <li>200g de queso ricotta</li>
-                    </ul>
-                    <h4>Preparación:</h4>
-                    <ol>
-                        <li>Saltear la cebolla y añadir la carne hasta dorar</li>
-                        <li>Agregar la salsa de tomate y cocinar 20 minutos</li>
-                        <li>En un molde, alternar capas de láminas, carne y quesos</li>
-                        <li>Hornear a 180°C por 45 minutos</li>
-                        <li>Dejar reposar 10 minutos antes de servir</li>
-                    </ol>
-                    <button class="favorite-btn" onclick="toggleFavorite(this)">❤️ Añadir a Favoritos</button>
+                    <div class="recipe-content">
+                        <h3>Pizza Casera Pro</h3>
+                        <div class="recipe-meta">
+                            <span><i class="fas fa-clock"></i> 45min</span>
+                            <span><i class="fas fa-users"></i> 3 personas</span>
+                            <span><i class="fas fa-fire"></i> 320cal</span>
+                        </div>
+                        <p class="recipe-desc">La pizza más crujiente que probarás. ¡Mejor que delivery! :V</p>
+                        <div class="recipe-tags">
+                            <span class="tag">🍕 Italiano</span>
+                            <span class="tag">👨‍👩‍👧‍👦 Familiar</span>
+                            <span class="tag">🎉 Fiesta</span>
+                        </div>
+                        <div class="card-actions">
+                            <button class="btn-favorite" onclick="toggleFavorite(this)">
+                                <i class="far fa-heart"></i>
+                            </button>
+                            <button class="btn-cook" onclick="startCooking(this)">
+                                <i class="fas fa-play"></i> Cocinar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Receta 2 -->
+                <div class="recipe-card" data-category="principal" data-time="60" data-difficulty="dificil">
+                    <div class="card-header">
+                        <img src="https://images.unsplash.com/photo-1565557623262-b51c2513a641?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="Sushi">
+                        <div class="card-badge dificil">Difícil :V</div>
+                        <button class="quick-view" onclick="quickView(this)"><i class="fas fa-eye"></i></button>
+                    </div>
+                    <div class="recipe-content">
+                        <h3>Sushi Master</h3>
+                        <div class="recipe-meta">
+                            <span><i class="fas fa-clock"></i> 60min</span>
+                            <span><i class="fas fa-users"></i> 2 personas</span>
+                            <span><i class="fas fa-fire"></i> 280cal</span>
+                        </div>
+                        <p class="recipe-desc">Conviértete en maestro sushi con esta receta paso a paso. ¡Arigato! :V</p>
+                        <div class="recipe-tags">
+                            <span class="tag">🍣 Japonés</span>
+                            <span class="tag">🎯 Premium</span>
+                            <span class="tag">🐟 Pescado</span>
+                        </div>
+                        <div class="card-actions">
+                            <button class="btn-favorite" onclick="toggleFavorite(this)">
+                                <i class="far fa-heart"></i>
+                            </button>
+                            <button class="btn-cook" onclick="startCooking(this)">
+                                <i class="fas fa-play"></i> Cocinar
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <section id="postres" class="recipe-section">
-            <h2>🍰 Postres</h2>
-            <div class="recipe-card">
-                <img src="https://images.unsplash.com/photo-1565958011703-44f9829ba187?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" alt="Brownie">
-                <div class="recipe-content">
-                    <h3>Brownie de Chocolate</h3>
-                    <div class="recipe-info">
-                        <span>⏱️ 40 min</span>
-                        <span>👥 8 personas</span>
-                        <span>⭐ Fácil</span>
-                    </div>
-                    <h4>Ingredientes:</h4>
-                    <ul>
-                        <li>200g de chocolate negro</li>
-                        <li>150g de mantequilla</li>
-                        <li>3 huevos</li>
-                        <li>200g de azúcar</li>
-                        <li>100g de harina</li>
-                        <li>100g de nueces picadas</li>
-                    </ul>
-                    <h4>Preparación:</h4>
-                    <ol>
-                        <li>Derretir chocolate y mantequilla a baño maría</li>
-                        <li>Batir huevos con azúcar hasta espumar</li>
-                        <li>Mezclar con el chocolate derretido</li>
-                        <li>Añadir harina y nueces, mezclar suavemente</li>
-                        <li>Hornear a 180°C por 25-30 minutos</li>
-                    </ol>
-                    <button class="favorite-btn" onclick="toggleFavorite(this)">❤️ Añadir a Favoritos</button>
-                </div>
-            </div>
-        </section>
+        <!-- Más secciones... -->
     </main>
+
+    <!-- Modal para vista rápida -->
+    <div id="quickModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <div id="modalContent"></div>
+        </div>
+    </div>
+
+    <!-- Cooking Timer -->
+    <div id="cookingTimer" class="cooking-timer hidden">
+        <div class="timer-content">
+            <h3><i class="fas fa-clock"></i> Tiempo de Cocción</h3>
+            <div id="timerDisplay">00:00</div>
+            <div class="timer-controls">
+                <button id="startTimer"><i class="fas fa-play"></i></button>
+                <button id="pauseTimer"><i class="fas fa-pause"></i></button>
+                <button id="resetTimer"><i class="fas fa-stop"></i></button>
+            </div>
+        </div>
+    </div>
 
     <footer>
         <div class="container">
-            <p>© 2024 Recetas Caseras - Hecho con ❤️ para amantes de la cocina</p>
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>🍳 Recetas Pro :V</h4>
+                    <p>Cocina como un profesional desde casa. ¡Sabor garantizado! :V</p>
+                </div>
+                <div class="footer-section">
+                    <h4>¡Síguenos!</h4>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-tiktok"></i> TikTok</a>
+                        <a href="#"><i class="fab fa-instagram"></i> Instagram</a>
+                        <a href="#"><i class="fab fa-youtube"></i> YouTube</a>
+                    </div>
+                </div>
+            </div>
+            <p class="footer-copy">© 2024 Recetas Pro :V - Hecho con ❤️ y mucho :V para los foodies</p>
         </div>
     </footer>
 
