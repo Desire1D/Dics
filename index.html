@@ -9,17 +9,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <!-- Loading Screen -->
-    <div id="loading" class="loading">
-        <div class="loader">
-            <div class="utensils">
-                <i class="fas fa-utensils spin"></i>
-            </div>
-            <p>Cargando recetas deliciosas...</p>
-        </div>
-    </div>
-
-    <!-- Header con modo oscuro -->
+    <!-- Header -->
     <header>
         <div class="container">
             <div class="header-content">
@@ -27,59 +17,36 @@
                     <h1>🍳 Recetas Pro <span class="emoji">:V</span></h1>
                     <p>¡Cocina como un chef! :V</p>
                 </div>
-                <div class="header-controls">
-                    <button id="darkModeToggle" class="mode-btn">
-                        <i class="fas fa-moon"></i>
-                    </button>
-                    <button id="searchToggle" class="search-btn">
-                        <i class="fas fa-search"></i>
-                    </button>
-                </div>
-            </div>
-
-            <!-- Barra de búsqueda -->
-            <div id="searchBar" class="search-bar hidden">
-                <input type="text" id="searchInput" placeholder="🔍 Buscar recetas... (ej: pollo, postre, fácil)">
-                <button id="searchBtn"><i class="fas fa-search"></i></button>
+                <button id="darkModeToggle" class="mode-btn">
+                    <i class="fas fa-moon"></i>
+                </button>
             </div>
         </div>
     </header>
 
-    <!-- Navegación mejorada -->
+    <!-- Navegación -->
     <nav>
         <div class="container">
             <ul>
-                <li><a href="#entradas" class="nav-link"><i class="fas fa-leaf"></i> Entradas</a></li>
-                <li><a href="#principales" class="nav-link"><i class="fas fa-utensils"></i> Principales</a></li>
-                <li><a href="#postres" class="nav-link"><i class="fas fa-ice-cream"></i> Postres</a></li>
-                <li><a href="#bebidas" class="nav-link"><i class="fas fa-glass-martini"></i> Bebidas</a></li>
-                <li><a href="#favoritos" class="nav-link"><i class="fas fa-heart"></i> Favoritos</a></li>
+                <li><a href="#entradas"><i class="fas fa-leaf"></i> Entradas</a></li>
+                <li><a href="#principales"><i class="fas fa-utensils"></i> Principales</a></li>
+                <li><a href="#postres"><i class="fas fa-ice-cream"></i> Postres</a></li>
+                <li><a href="#favoritos"><i class="fas fa-heart"></i> Favoritos</a></li>
             </ul>
         </div>
     </nav>
-
-    <!-- Contador de recetas -->
-    <div class="stats-bar">
-        <div class="container">
-            <div class="stats">
-                <span id="totalRecipes">📊 Total recetas: 0</span>
-                <span id="favoriteCount">❤️ Favoritos: 0</span>
-                <span id="cookingTime">⏱️ Tiempo promedio: 0min</span>
-            </div>
-        </div>
-    </div>
 
     <main class="container">
         <!-- Sección de Entradas -->
         <section id="entradas" class="recipe-section">
             <h2><i class="fas fa-leaf"></i> 🥗 Entradas Frescas</h2>
             <div class="recipes-grid">
+                
                 <!-- Receta 1 -->
-                <div class="recipe-card" data-category="entrada" data-time="15" data-difficulty="facil">
+                <div class="recipe-card" data-time="15" data-difficulty="facil">
                     <div class="card-header">
-                        <img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="Ensalada César">
+                        <img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Ensalada César">
                         <div class="card-badge facil">Fácil :V</div>
-                        <button class="quick-view" onclick="quickView(this)"><i class="fas fa-eye"></i></button>
                     </div>
                     <div class="recipe-content">
                         <h3>Ensalada César Pro</h3>
@@ -88,29 +55,46 @@
                             <span><i class="fas fa-users"></i> 2 personas</span>
                             <span><i class="fas fa-fire"></i> 180cal</span>
                         </div>
-                        <p class="recipe-desc">La clásica ensalada con un toque gourmet que te volará la cabeza :V</p>
-                        <div class="recipe-tags">
-                            <span class="tag">🥬 Vegetariano</span>
-                            <span class="tag">⚡ Rápido</span>
-                            <span class="tag">🍴 Saludable</span>
+                        <p class="recipe-desc">La clásica ensalada con un toque gourmet :V</p>
+                        
+                        <div class="ingredients">
+                            <h4><i class="fas fa-list"></i> Ingredientes:</h4>
+                            <ul>
+                                <li>1 lechuga romana</li>
+                                <li>50g queso parmesano</li>
+                                <li>100g pollo a la plancha</li>
+                                <li>2 rebanadas de pan</li>
+                                <li>3 cdas aderezo césar</li>
+                            </ul>
                         </div>
+
+                        <div class="preparation">
+                            <h4><i class="fas fa-blender"></i> Preparación:</h4>
+                            <ol>
+                                <li>Lavar y cortar la lechuga</li>
+                                <li>Dorar el pan para crutones</li>
+                                <li>Cocinar el pollo a la plancha</li>
+                                <li>Mezclar todo con el aderezo</li>
+                                <li>¡Servir y disfrutar! :V</li>
+                            </ol>
+                        </div>
+
                         <div class="card-actions">
                             <button class="btn-favorite" onclick="toggleFavorite(this)">
-                                <i class="far fa-heart"></i>
+                                <i class="far fa-heart"></i> Favorito
                             </button>
-                            <button class="btn-cook" onclick="startCooking(this)">
-                                <i class="fas fa-play"></i> Cocinar
+                            <button class="btn-timer" onclick="startTimer(15, this)">
+                                <i class="fas fa-clock"></i> Timer
                             </button>
                         </div>
                     </div>
                 </div>
 
                 <!-- Receta 2 -->
-                <div class="recipe-card" data-category="entrada" data-time="25" data-difficulty="medio">
+                <div class="recipe-card" data-time="25" data-difficulty="medio">
                     <div class="card-header">
-                        <img src="https://images.unsplash.com/photo-1482049016688-2d3e1b311543?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="Bruschetta">
+                        <img src="https://images.unsplash.com/photo-1482049016688-2d3e1b311543?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Bruschetta">
                         <div class="card-badge medio">Medio</div>
-                        <button class="quick-view" onclick="quickView(this)"><i class="fas fa-eye"></i></button>
                     </div>
                     <div class="recipe-content">
                         <h3>Bruschetta Italiana</h3>
@@ -119,35 +103,54 @@
                             <span><i class="fas fa-users"></i> 4 personas</span>
                             <span><i class="fas fa-fire"></i> 220cal</span>
                         </div>
-                        <p class="recipe-desc">Pan crujiente con tomate fresco y albahaca. ¡Sabor italiano garantizado! :V</p>
-                        <div class="recipe-tags">
-                            <span class="tag">🍅 Vegetariano</span>
-                            <span class="tag">🇮🇹 Italiano</span>
-                            <span class="tag">🎉 Fiesta</span>
+                        <p class="recipe-desc">Pan crujiente con tomate y albahaca :V</p>
+                        
+                        <div class="ingredients">
+                            <h4><i class="fas fa-list"></i> Ingredientes:</h4>
+                            <ul>
+                                <li>8 rebanadas pan baguette</li>
+                                <li>4 tomates maduros</li>
+                                <li>2 dientes de ajo</li>
+                                <li>Hojas de albahaca fresca</li>
+                                <li>Aceite de oliva</li>
+                            </ul>
                         </div>
+
+                        <div class="preparation">
+                            <h4><i class="fas fa-blender"></i> Preparación:</h4>
+                            <ol>
+                                <li>Tostar el pan en el horno</li>
+                                <li>Picar tomates y albahaca</li>
+                                <li>Mezclar con ajo y aceite</li>
+                                <li>Colocar sobre el pan tostado</li>
+                                <li>¡Servir inmediatamente! :V</li>
+                            </ol>
+                        </div>
+
                         <div class="card-actions">
                             <button class="btn-favorite" onclick="toggleFavorite(this)">
-                                <i class="far fa-heart"></i>
+                                <i class="far fa-heart"></i> Favorito
                             </button>
-                            <button class="btn-cook" onclick="startCooking(this)">
-                                <i class="fas fa-play"></i> Cocinar
+                            <button class="btn-timer" onclick="startTimer(25, this)">
+                                <i class="fas fa-clock"></i> Timer
                             </button>
                         </div>
                     </div>
                 </div>
+
             </div>
         </section>
 
         <!-- Sección de Platos Principales -->
         <section id="principales" class="recipe-section">
-            <h2><i class="fas fa-utensils"></i> 🍝 Platos Principales Épicos</h2>
+            <h2><i class="fas fa-utensils"></i> 🍝 Platos Principales</h2>
             <div class="recipes-grid">
+                
                 <!-- Receta 1 -->
-                <div class="recipe-card" data-category="principal" data-time="45" data-difficulty="medio">
+                <div class="recipe-card" data-time="45" data-difficulty="medio">
                     <div class="card-header">
-                        <img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="Pizza">
+                        <img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Pizza">
                         <div class="card-badge medio">Medio</div>
-                        <button class="quick-view" onclick="quickView(this)"><i class="fas fa-eye"></i></button>
                     </div>
                     <div class="recipe-content">
                         <h3>Pizza Casera Pro</h3>
@@ -156,97 +159,180 @@
                             <span><i class="fas fa-users"></i> 3 personas</span>
                             <span><i class="fas fa-fire"></i> 320cal</span>
                         </div>
-                        <p class="recipe-desc">La pizza más crujiente que probarás. ¡Mejor que delivery! :V</p>
-                        <div class="recipe-tags">
-                            <span class="tag">🍕 Italiano</span>
-                            <span class="tag">👨‍👩‍👧‍👦 Familiar</span>
-                            <span class="tag">🎉 Fiesta</span>
+                        <p class="recipe-desc">La pizza más crujiente que probarás :V</p>
+                        
+                        <div class="ingredients">
+                            <h4><i class="fas fa-list"></i> Ingredientes:</h4>
+                            <ul>
+                                <li>500g harina de fuerza</li>
+                                <li>300ml agua tibia</li>
+                                <li>25g levadura fresca</li>
+                                <li>200g salsa de tomate</li>
+                                <li>250g queso mozzarella</li>
+                                <li>Ingredientes al gusto</li>
+                            </ul>
                         </div>
+
+                        <div class="preparation">
+                            <h4><i class="fas fa-blender"></i> Preparación:</h4>
+                            <ol>
+                                <li>Mezclar harina, agua y levadura</li>
+                                <li>Dejar reposar 1 hora</li>
+                                <li>Estirar la masa en pizza</li>
+                                <li>Añadir ingredientes</li>
+                                <li>Hornear 15min a 220°C</li>
+                            </ol>
+                        </div>
+
                         <div class="card-actions">
                             <button class="btn-favorite" onclick="toggleFavorite(this)">
-                                <i class="far fa-heart"></i>
+                                <i class="far fa-heart"></i> Favorito
                             </button>
-                            <button class="btn-cook" onclick="startCooking(this)">
-                                <i class="fas fa-play"></i> Cocinar
+                            <button class="btn-timer" onclick="startTimer(45, this)">
+                                <i class="fas fa-clock"></i> Timer
                             </button>
                         </div>
                     </div>
                 </div>
 
                 <!-- Receta 2 -->
-                <div class="recipe-card" data-category="principal" data-time="60" data-difficulty="dificil">
+                <div class="recipe-card" data-time="30" data-difficulty="facil">
                     <div class="card-header">
-                        <img src="https://images.unsplash.com/photo-1565557623262-b51c2513a641?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="Sushi">
-                        <div class="card-badge dificil">Difícil :V</div>
-                        <button class="quick-view" onclick="quickView(this)"><i class="fas fa-eye"></i></button>
+                        <img src="https://images.unsplash.com/photo-1563379926898-05f4575a45d8?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Pasta">
+                        <div class="card-badge facil">Fácil :V</div>
                     </div>
                     <div class="recipe-content">
-                        <h3>Sushi Master</h3>
+                        <h3>Pasta Alfredo</h3>
                         <div class="recipe-meta">
-                            <span><i class="fas fa-clock"></i> 60min</span>
+                            <span><i class="fas fa-clock"></i> 30min</span>
                             <span><i class="fas fa-users"></i> 2 personas</span>
-                            <span><i class="fas fa-fire"></i> 280cal</span>
+                            <span><i class="fas fa-fire"></i> 450cal</span>
                         </div>
-                        <p class="recipe-desc">Conviértete en maestro sushi con esta receta paso a paso. ¡Arigato! :V</p>
-                        <div class="recipe-tags">
-                            <span class="tag">🍣 Japonés</span>
-                            <span class="tag">🎯 Premium</span>
-                            <span class="tag">🐟 Pescado</span>
+                        <p class="recipe-desc">Cremosa pasta que te hará feliz :V</p>
+                        
+                        <div class="ingredients">
+                            <h4><i class="fas fa-list"></i> Ingredientes:</h4>
+                            <ul>
+                                <li>250g pasta fettuccine</li>
+                                <li>200ml crema para batir</li>
+                                <li>100g queso parmesano</li>
+                                <li>2 cdas mantequilla</li>
+                                <li>Nuez moscada y pimienta</li>
+                            </ul>
                         </div>
+
+                        <div class="preparation">
+                            <h4><i class="fas fa-blender"></i> Preparación:</h4>
+                            <ol>
+                                <li>Cocinar la pasta al dente</li>
+                                <li>Derretir mantequilla en sartén</li>
+                                <li>Añadir crema y queso</li>
+                                <li>Mezclar con la pasta cocida</li>
+                                <li>¡Servir con más queso! :V</li>
+                            </ol>
+                        </div>
+
                         <div class="card-actions">
                             <button class="btn-favorite" onclick="toggleFavorite(this)">
-                                <i class="far fa-heart"></i>
+                                <i class="far fa-heart"></i> Favorito
                             </button>
-                            <button class="btn-cook" onclick="startCooking(this)">
-                                <i class="fas fa-play"></i> Cocinar
+                            <button class="btn-timer" onclick="startTimer(30, this)">
+                                <i class="fas fa-clock"></i> Timer
                             </button>
                         </div>
                     </div>
                 </div>
+
             </div>
         </section>
 
-        <!-- Más secciones... -->
+        <!-- Sección de Postres -->
+        <section id="postres" class="recipe-section">
+            <h2><i class="fas fa-ice-cream"></i> 🍰 Postres Deliciosos</h2>
+            <div class="recipes-grid">
+                
+                <!-- Receta 1 -->
+                <div class="recipe-card" data-time="20" data-difficulty="facil">
+                    <div class="card-header">
+                        <img src="https://images.unsplash.com/photo-1563729784474-d77dbb933a9e?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Brownie">
+                        <div class="card-badge facil">Fácil :V</div>
+                    </div>
+                    <div class="recipe-content">
+                        <h3>Brownie Express</h3>
+                        <div class="recipe-meta">
+                            <span><i class="fas fa-clock"></i> 20min</span>
+                            <span><i class="fas fa-users"></i> 6 personas</span>
+                            <span><i class="fas fa-fire"></i> 380cal</span>
+                        </div>
+                        <p class="recipe-desc">Brownie chocolatoso en 20 minutos :V</p>
+                        
+                        <div class="ingredients">
+                            <h4><i class="fas fa-list"></i> Ingredientes:</h4>
+                            <ul>
+                                <li>200g chocolate negro</li>
+                                <li>150g mantequilla</li>
+                                <li>3 huevos</li>
+                                <li>200g azúcar</li>
+                                <li>100g harina</li>
+                                <li>100g nueces</li>
+                            </ul>
+                        </div>
+
+                        <div class="preparation">
+                            <h4><i class="fas fa-blender"></i> Preparación:</h4>
+                            <ol>
+                                <li>Derretir chocolate y mantequilla</li>
+                                <li>Batir huevos con azúcar</li>
+                                <li>Mezclar todo con harina</li>
+                                <li>Añadir nueces picadas</li>
+                                <li>Hornear 15min a 180°C</li>
+                            </ol>
+                        </div>
+
+                        <div class="card-actions">
+                            <button class="btn-favorite" onclick="toggleFavorite(this)">
+                                <i class="far fa-heart"></i> Favorito
+                            </button>
+                            <button class="btn-timer" onclick="startTimer(20, this)">
+                                <i class="fas fa-clock"></i> Timer
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Sección de Favoritos -->
+        <section id="favoritos" class="recipe-section">
+            <h2><i class="fas fa-heart"></i> ❤️ Tus Favoritos</h2>
+            <div id="favorites-container" class="recipes-grid">
+                <div class="empty-favorites">
+                    <i class="fas fa-heart-broken"></i>
+                    <h3>Aún no tienes favoritos</h3>
+                    <p>¡Haz clic en el corazón de las recetas que te gusten!</p>
+                </div>
+            </div>
+        </section>
+
     </main>
 
-    <!-- Modal para vista rápida -->
-    <div id="quickModal" class="modal">
-        <div class="modal-content">
-            <span class="close-modal">&times;</span>
-            <div id="modalContent"></div>
-        </div>
-    </div>
-
-    <!-- Cooking Timer -->
-    <div id="cookingTimer" class="cooking-timer hidden">
+    <!-- Timer Flotante -->
+    <div id="timer" class="timer-hidden">
         <div class="timer-content">
-            <h3><i class="fas fa-clock"></i> Tiempo de Cocción</h3>
-            <div id="timerDisplay">00:00</div>
+            <h3><i class="fas fa-clock"></i> Timer de Cocina</h3>
+            <div id="timer-display">00:00</div>
             <div class="timer-controls">
-                <button id="startTimer"><i class="fas fa-play"></i></button>
-                <button id="pauseTimer"><i class="fas fa-pause"></i></button>
-                <button id="resetTimer"><i class="fas fa-stop"></i></button>
+                <button onclick="pauseTimer()"><i class="fas fa-pause"></i></button>
+                <button onclick="resetTimer()"><i class="fas fa-stop"></i></button>
             </div>
+            <button class="btn-close-timer" onclick="hideTimer()">Cerrar</button>
         </div>
     </div>
 
     <footer>
         <div class="container">
-            <div class="footer-content">
-                <div class="footer-section">
-                    <h4>🍳 Recetas Pro :V</h4>
-                    <p>Cocina como un profesional desde casa. ¡Sabor garantizado! :V</p>
-                </div>
-                <div class="footer-section">
-                    <h4>¡Síguenos!</h4>
-                    <div class="social-links">
-                        <a href="#"><i class="fab fa-tiktok"></i> TikTok</a>
-                        <a href="#"><i class="fab fa-instagram"></i> Instagram</a>
-                        <a href="#"><i class="fab fa-youtube"></i> YouTube</a>
-                    </div>
-                </div>
-            </div>
-            <p class="footer-copy">© 2024 Recetas Pro :V - Hecho con ❤️ y mucho :V para los foodies</p>
+            <p>© 2024 Recetas Pro :V - Hecho con ❤️ y mucho :V</p>
         </div>
     </footer>
 
