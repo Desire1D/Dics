@@ -20,9 +20,15 @@ document.addEventListener('DOMContentLoaded', function() {
     // Configurar navegación suave
     setupSmoothScroll();
     
+    // Configurar animaciones de scroll
+    setupScrollAnimations();
+    
+    // Configurar navegación activa
+    setupActiveNavigation();
+    
     // Mostrar mensaje de bienvenida
     setTimeout(() => {
-        showNotification('🌄 Bienvenido a Sabores Ancestrales Perú - Rescatando nuestra herencia culinaria', 'success');
+        showNotification('🌄 Bienvenido a Sabores Ancestrales Perú', 'success');
     }, 1000);
 });
 
@@ -39,7 +45,7 @@ function toggleDarkMode() {
         document.documentElement.setAttribute('data-theme', 'dark');
         localStorage.setItem('darkMode', 'true');
         document.querySelector('#darkModeToggle i').className = 'fas fa-sun';
-        showNotification('🌙 Modo oscuro activado - Como una noche andina');
+        showNotification('🌙 Modo oscuro activado');
     }
 }
 
@@ -78,14 +84,16 @@ function toggleFavorite(button) {
             time: card.dataset.time,
             difficulty: card.dataset.difficulty,
             image: card.querySelector('img').src,
-            description: card.querySelector('.recipe-desc').textContent
+            description: card.querySelector('.recipe-desc').textContent,
+            ingredients: Array.from(card.querySelectorAll('.ingredients li')).map(li => li.textContent),
+            preparation: Array.from(card.querySelectorAll('.preparation li')).map(li => li.textContent)
         };
         
         favorites.push(recipeData);
         button.classList.add('active');
         button.innerHTML = '<i class="fas fa-heart"></i> En Favoritos';
         card.classList.add('favorite-recipe');
-        showNotification(`❤️ "${recipeTitle}" agregado a tus recetas ancestrales`);
+        showNotification(`❤️ "${recipeTitle}" agregado a favoritos`);
     }
     
     // Guardar en localStorage
@@ -123,7 +131,7 @@ function updateFavoritesSection() {
             <div class="empty-favorites">
                 <i class="fas fa-heart-broken"></i>
                 <h3>Aún no tienes recetas favoritas</h3>
-                <p>¡Haz clic en el corazón de las recetas que te gusten para rescatarlas!</p>
+                <p>Haz clic en el corazón de las recetas que más te gusten para agregarlas a esta sección.</p>
             </div>
         `;
         return;
@@ -134,15 +142,37 @@ function updateFavoritesSection() {
         <div class="recipe-card favorite-recipe" data-time="${recipe.time}" data-difficulty="${recipe.difficulty}">
             <div class="card-header">
                 <img src="${recipe.image}" alt="${recipe.title}">
-                <div class="card-badge ${recipe.difficulty}">${getDifficultyText(recipe.difficulty)}</div>
+                <div class="card-overlay">
+                    <span class="card-badge ${recipe.difficulty}">${getDifficultyText(recipe.difficulty)}</span>
+                </div>
             </div>
             <div class="recipe-content">
                 <h3>${recipe.title}</h3>
                 <div class="recipe-meta">
                     <span><i class="fas fa-clock"></i> ${recipe.time}min</span>
                     <span><i class="fas fa-map-marker-alt"></i> ${getRegionName(recipe.section)}</span>
+                    <span><i class="fas fa-fire"></i> ${getCalories(recipe.time)} cal</span>
                 </div>
                 <p class="recipe-desc">${recipe.description}</p>
+                
+                ${recipe.ingredients ? `
+                <div class="ingredients">
+                    <h4><i class="fas fa-list"></i> Ingredientes</h4>
+                    <ul>
+                        ${recipe.ingredients.map(ingredient => `<li>${ingredient}</li>`).join('')}
+                    </ul>
+                </div>
+                ` : ''}
+                
+                ${recipe.preparation ? `
+                <div class="preparation">
+                    <h4><i class="fas fa-blender"></i> Preparación</h4>
+                    <ol>
+                        ${recipe.preparation.map(step => `<li>${step}</li>`).join('')}
+                    </ol>
+                </div>
+                ` : ''}
+                
                 <div class="card-actions">
                     <button class="btn-favorite active" onclick="toggleFavorite(this)">
                         <i class="fas fa-heart"></i> En Favoritos
@@ -174,6 +204,11 @@ function getRegionName(section) {
     return regions[section] || section;
 }
 
+function getCalories(time) {
+    // Cálculo simple de calorías basado en el tiempo de preparación
+    return Math.floor(time * 8 + 150);
+}
+
 // Timer de cocina
 function startTimer(minutes, button) {
     // Detener timer anterior si existe
@@ -196,18 +231,24 @@ function startTimer(minutes, button) {
         if (timeLeft > 0 && isTimerRunning) {
             timeLeft--;
             updateTimerDisplay();
+            
+            // Notificación cuando queden 5 minutos
+            if (timeLeft === 300) {
+                showNotification('⏰ ¡Quedan 5 minutos! Prepárate para finalizar', 'warning');
+            }
+            
+            // Notificación cuando quede 1 minuto
+            if (timeLeft === 60) {
+                showNotification('🔔 ¡Último minuto! Revisa tu preparación', 'danger');
+            }
         } else if (timeLeft === 0) {
             clearInterval(timerInterval);
-            showNotification('🎉 ¡Tiempo completado! Tu platillo ancestral está listo 🌄', 'success');
-            // Sonido opcional (solo si el usuario ha interactuado)
-            try {
-                const audio = new Audio('data:audio/wav;base64,UklGRigAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQQAAAAAAA==');
-                audio.play();
-            } catch (e) {}
+            showNotification('🎉 ¡Tiempo completado! Tu platillo ancestral está listo', 'success');
+            playCompletionSound();
         }
     }, 1000);
     
-    showNotification(`⏱️ Timer ancestral iniciado: ${minutes} minutos`);
+    showNotification(`⏱️ Timer iniciado: ${minutes} minutos`);
 }
 
 function pauseTimer() {
@@ -221,7 +262,7 @@ function resetTimer() {
     timeLeft = 0;
     isTimerRunning = false;
     document.getElementById('timer').classList.add('timer-hidden');
-    showNotification('🛑 Timer ancestral detenido');
+    showNotification('🛑 Timer detenido');
 }
 
 function hideTimer() {
@@ -237,26 +278,115 @@ function updateTimerDisplay() {
     // Cambiar color cuando quede poco tiempo
     if (timeLeft < 60) {
         display.style.color = 'var(--danger)';
+    } else if (timeLeft < 300) {
+        display.style.color = 'var(--warning)';
     } else {
         display.style.color = 'var(--primary)';
     }
 }
 
+function playCompletionSound() {
+    // Crear un sonido simple usando el Web Audio API
+    try {
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        const oscillator = audioContext.createOscillator();
+        const gainNode = audioContext.createGain();
+        
+        oscillator.connect(gainNode);
+        gainNode.connect(audioContext.destination);
+        
+        oscillator.frequency.value = 800;
+        oscillator.type = 'sine';
+        
+        gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 1);
+        
+        oscillator.start(audioContext.currentTime);
+        oscillator.stop(audioContext.currentTime + 1);
+    } catch (e) {
+        console.log('El audio no está disponible en este navegador');
+    }
+}
+
 // Navegación suave
 function setupSmoothScroll() {
-    document.querySelectorAll('nav a').forEach(link => {
+    document.querySelectorAll('nav a, .hero-buttons a').forEach(link => {
         link.addEventListener('click', function(e) {
             e.preventDefault();
             const targetId = this.getAttribute('href');
-            const targetSection = document.querySelector(targetId);
             
-            if (targetSection) {
-                targetSection.scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'start'
-                });
+            if (targetId.startsWith('#')) {
+                const targetSection = document.querySelector(targetId);
+                
+                if (targetSection) {
+                    // Actualizar navegación activa
+                    updateActiveNavigation(targetId);
+                    
+                    targetSection.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
             }
         });
+    });
+}
+
+// Navegación activa
+function setupActiveNavigation() {
+    // Observar las secciones para actualizar la navegación
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('.nav-link');
+    
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const id = entry.target.getAttribute('id');
+                updateActiveNavigation(`#${id}`);
+            }
+        });
+    }, {
+        threshold: 0.5,
+        rootMargin: '-20% 0px -20% 0px'
+    });
+    
+    sections.forEach(section => {
+        observer.observe(section);
+    });
+}
+
+function updateActiveNavigation(targetId) {
+    document.querySelectorAll('.nav-link').forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('href') === targetId) {
+            link.classList.add('active');
+        }
+    });
+}
+
+// Animaciones al hacer scroll
+function setupScrollAnimations() {
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('fade-in');
+            }
+        });
+    }, observerOptions);
+
+    // Observar todas las tarjetas de recetas
+    document.querySelectorAll('.recipe-card').forEach(card => {
+        observer.observe(card);
+    });
+    
+    // Observar elementos del hero
+    document.querySelectorAll('.hero h1, .hero p, .hero-buttons').forEach(el => {
+        el.classList.add('fade-in');
     });
 }
 
@@ -267,9 +397,11 @@ function showNotification(message, type = 'info') {
     notification.textContent = message;
     notification.style.cssText = `
         position: fixed;
-        top: 20px;
+        top: 120px;
         right: 20px;
-        background: ${type === 'success' ? 'var(--success)' : 'var(--primary)'};
+        background: ${type === 'success' ? 'var(--success)' : 
+                     type === 'warning' ? 'var(--warning)' : 
+                     type === 'danger' ? 'var(--danger)' : 'var(--primary)'};
         color: white;
         padding: 1rem 1.5rem;
         border-radius: 10px;
@@ -318,29 +450,82 @@ style.textContent = `
         }
     }
     
-    .favorite-recipe {
-        position: relative;
-        border: 2px solid var(--primary) !important;
-        background: linear-gradient(135deg, var(--light), #fff8e1);
+    @keyframes pulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+        100% { transform: scale(1); }
     }
     
-    .favorite-recipe::before {
-        content: '❤️';
-        position: absolute;
-        top: -10px;
-        right: -10px;
-        background: var(--primary);
-        color: white;
-        width: 30px;
-        height: 30px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 0.8rem;
-        z-index: 10;
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
     }
 `;
 document.head.appendChild(style);
 
-console.log('✅ ¡Sabores Ancestrales Perú cargado correctamente! ¡A cocinar como nuestros abuelos! 🌄');
+// Utilidades adicionales
+function searchRecipes(query) {
+    const recipes = document.querySelectorAll('.recipe-card');
+    let found = false;
+    
+    recipes.forEach(recipe => {
+        const title = recipe.querySelector('h3').textContent.toLowerCase();
+        const description = recipe.querySelector('.recipe-desc').textContent.toLowerCase();
+        const ingredients = Array.from(recipe.querySelectorAll('.ingredients li'))
+            .map(li => li.textContent.toLowerCase())
+            .join(' ');
+        
+        if (title.includes(query.toLowerCase()) || 
+            description.includes(query.toLowerCase()) || 
+            ingredients.includes(query.toLowerCase())) {
+            recipe.style.display = 'flex';
+            found = true;
+        } else {
+            recipe.style.display = 'none';
+        }
+    });
+    
+    return found;
+}
+
+function filterByRegion(region) {
+    const sections = document.querySelectorAll('.recipe-section');
+    
+    sections.forEach(section => {
+        if (region === 'all' || section.id === region) {
+            section.style.display = 'block';
+        } else {
+            section.style.display = 'none';
+        }
+    });
+}
+
+function filterByDifficulty(difficulty) {
+    const recipes = document.querySelectorAll('.recipe-card');
+    
+    recipes.forEach(recipe => {
+        if (difficulty === 'all' || recipe.dataset.difficulty === difficulty) {
+            recipe.style.display = 'flex';
+        } else {
+            recipe.style.display = 'none';
+        }
+    });
+}
+
+// Exportar funciones para uso global
+window.toggleFavorite = toggleFavorite;
+window.startTimer = startTimer;
+window.pauseTimer = pauseTimer;
+window.resetTimer = resetTimer;
+window.hideTimer = hideTimer;
+window.searchRecipes = searchRecipes;
+window.filterByRegion = filterByRegion;
+window.filterByDifficulty = filterByDifficulty;
+
+console.log('✅ ¡Sabores Ancestrales Perú cargado correctamente!');
