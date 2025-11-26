@@ -91,6 +91,41 @@ header {
     transform: scale(1.1);
 }
 
+/* Botón de música */
+.music-btn {
+    position: fixed;
+    bottom: 2rem;
+    left: 2rem;
+    background: var(--primary);
+    border: none;
+    color: white;
+    padding: 1rem;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: var(--transition);
+    font-size: 1.2rem;
+    box-shadow: var(--shadow);
+    z-index: 1000;
+}
+
+.music-btn:hover {
+    background: var(--primary-dark);
+    transform: scale(1.1);
+}
+
+.music-btn.playing {
+    background: var(--success);
+}
+
+.music-btn.playing i {
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
+
 /* Navegación */
 nav {
     background: var(--light);
@@ -414,6 +449,12 @@ footer {
         bottom: 1rem;
         right: 1rem;
         left: 1rem;
+    }
+    
+    .music-btn {
+        bottom: 1rem;
+        left: 1rem;
+        padding: 0.8rem;
     }
 }
 
