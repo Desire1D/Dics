@@ -5,809 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sabores Ancestrales Perú - Gastronomía Tradicional Peruana</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        /* Variables CSS */
-        :root {
-            --primary: #D35400;
-            --primary-dark: #A04000;
-            --primary-light: #E67E22;
-            --secondary: #27AE60;
-            --accent: #F39C12;
-            --dark: #2C3E50;
-            --darker: #1A252F;
-            --light: #ECF0F1;
-            --gray: #7F8C8D;
-            --gray-light: #BDC3C7;
-            --success: #2ECC71;
-            --warning: #F1C40F;
-            --danger: #E74C3C;
-            --costa: #3498DB;
-            --sierra: #8E44AD;
-            --selva: #16A085;
-            
-            --shadow: 0 10px 30px rgba(0,0,0,0.1);
-            --shadow-hover: 0 15px 40px rgba(0,0,0,0.15);
-            --shadow-dark: 0 10px 30px rgba(0,0,0,0.3);
-            --border-radius: 12px;
-            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-            --transition-slow: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
-        }
-
-        [data-theme="dark"] {
-            --light: #2C3E50;
-            --dark: #ECF0F1;
-            --darker: #ECF0F1;
-            --gray: #BDC3C7;
-            --gray-light: #7F8C8D;
-            --shadow: 0 10px 30px rgba(0,0,0,0.3);
-            --shadow-hover: 0 15px 40px rgba(0,0,0,0.4);
-        }
-
-        /* Reset y estilos base */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        html {
-            scroll-behavior: smooth;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: var(--dark);
-            background-color: var(--light);
-            transition: var(--transition-slow);
-            overflow-x: hidden;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        section {
-            padding: 80px 0;
-        }
-
-        h1, h2, h3, h4, h5, h6 {
-            font-weight: 700;
-            line-height: 1.2;
-            margin-bottom: 1rem;
-        }
-
-        h1 {
-            font-size: 3.5rem;
-        }
-
-        h2 {
-            font-size: 2.5rem;
-            position: relative;
-            display: inline-block;
-        }
-
-        h2::after {
-            content: '';
-            position: absolute;
-            bottom: -10px;
-            left: 0;
-            width: 80px;
-            height: 4px;
-            background: var(--primary);
-            border-radius: 2px;
-        }
-
-        h3 {
-            font-size: 1.8rem;
-        }
-
-        p {
-            margin-bottom: 1.5rem;
-        }
-
-        a {
-            text-decoration: none;
-            color: inherit;
-            transition: var(--transition);
-        }
-
-        ul {
-            list-style: none;
-        }
-
-        img {
-            max-width: 100%;
-            height: auto;
-            display: block;
-        }
-
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-            padding: 0.8rem 1.8rem;
-            border-radius: 50px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: var(--transition);
-            border: none;
-            font-size: 1rem;
-        }
-
-        .btn-primary {
-            background: var(--primary);
-            color: white;
-        }
-
-        .btn-primary:hover {
-            background: var(--primary-dark);
-            transform: translateY(-3px);
-            box-shadow: var(--shadow-hover);
-        }
-
-        .btn-secondary {
-            background: transparent;
-            color: var(--primary);
-            border: 2px solid var(--primary);
-        }
-
-        .btn-secondary:hover {
-            background: var(--primary);
-            color: white;
-            transform: translateY(-3px);
-        }
-
-        .section-header {
-            text-align: center;
-            margin-bottom: 4rem;
-        }
-
-        .section-header p {
-            max-width: 700px;
-            margin: 0 auto;
-            color: var(--gray);
-            font-size: 1.1rem;
-        }
-
-        /* Header */
-        header {
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            color: white;
-            padding: 1.5rem 0;
-            position: fixed;
-            width: 100%;
-            top: 0;
-            z-index: 1000;
-            box-shadow: var(--shadow);
-        }
-
-        .header-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .logo-icon {
-            font-size: 2.5rem;
-            animation: pulse 2s infinite;
-        }
-
-        .logo-text h1 {
-            font-size: 1.8rem;
-            margin-bottom: 0.2rem;
-        }
-
-        .logo-text p {
-            font-size: 0.9rem;
-            opacity: 0.9;
-            margin-bottom: 0;
-        }
-
-        .header-actions {
-            display: flex;
-            align-items: center;
-            gap: 1.5rem;
-        }
-
-        .mode-btn {
-            background: rgba(255,255,255,0.15);
-            border: none;
-            color: white;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            cursor: pointer;
-            transition: var(--transition);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
-        }
-
-        .mode-btn:hover {
-            background: rgba(255,255,255,0.25);
-            transform: scale(1.1);
-        }
-
-        /* Navegación */
-        nav {
-            background: var(--light);
-            box-shadow: var(--shadow);
-            position: sticky;
-            top: 80px;
-            z-index: 999;
-        }
-
-        .nav-container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1rem 0;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 2rem;
-        }
-
-        .nav-link {
-            font-weight: 600;
-            padding: 0.5rem 1rem;
-            border-radius: 50px;
-            transition: var(--transition);
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .nav-link:hover {
-            background: var(--primary);
-            color: white;
-        }
-
-        .nav-link.active {
-            background: var(--primary);
-            color: white;
-        }
-
-        /* Hero Section */
-        .hero {
-            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1589302168068-964664d93dc0?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80');
-            background-size: cover;
-            background-position: center;
-            color: white;
-            padding: 180px 0 100px;
-            text-align: center;
-        }
-
-        .hero h1 {
-            font-size: 4rem;
-            margin-bottom: 1.5rem;
-            text-shadow: 2px 2px 10px rgba(0,0,0,0.5);
-        }
-
-        .hero p {
-            font-size: 1.3rem;
-            max-width: 700px;
-            margin: 0 auto 2.5rem;
-            opacity: 0.9;
-        }
-
-        .hero-buttons {
-            display: flex;
-            gap: 1rem;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
-        /* Secciones de recetas */
-        .recipe-section {
-            position: relative;
-        }
-
-        .region-badge {
-            position: absolute;
-            top: -15px;
-            left: 50%;
-            transform: translateX(-50%);
-            padding: 0.5rem 1.5rem;
-            border-radius: 50px;
-            color: white;
-            font-weight: 600;
-            font-size: 0.9rem;
-            z-index: 10;
-        }
-
-        .costa-badge {
-            background: var(--costa);
-        }
-
-        .sierra-badge {
-            background: var(--sierra);
-        }
-
-        .selva-badge {
-            background: var(--selva);
-        }
-
-        /* Grid de recetas */
-        .recipes-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-            gap: 2.5rem;
-        }
-
-        /* Recipe Cards */
-        .recipe-card {
-            background: var(--light);
-            border-radius: var(--border-radius);
-            box-shadow: var(--shadow);
-            overflow: hidden;
-            transition: var(--transition);
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .recipe-card:hover {
-            transform: translateY(-10px);
-            box-shadow: var(--shadow-hover);
-        }
-
-        .card-header {
-            position: relative;
-            height: 220px;
-            overflow: hidden;
-        }
-
-        .card-header img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: var(--transition-slow);
-        }
-
-        .recipe-card:hover .card-header img {
-            transform: scale(1.1);
-        }
-
-        .card-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(to bottom, transparent, rgba(0,0,0,0.7));
-            display: flex;
-            align-items: flex-end;
-            padding: 1.5rem;
-            color: white;
-        }
-
-        .card-badge {
-            padding: 0.5rem 1rem;
-            border-radius: 50px;
-            color: white;
-            font-weight: 600;
-            font-size: 0.8rem;
-            background: rgba(0,0,0,0.7);
-            backdrop-filter: blur(10px);
-        }
-
-        .card-badge.facil {
-            border-left: 4px solid var(--success);
-        }
-
-        .card-badge.medio {
-            border-left: 4px solid var(--warning);
-        }
-
-        .card-badge.dificil {
-            border-left: 4px solid var(--danger);
-        }
-
-        .recipe-content {
-            padding: 1.8rem;
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .recipe-content h3 {
-            font-size: 1.5rem;
-            color: var(--primary);
-            margin-bottom: 1rem;
-        }
-
-        .recipe-meta {
-            display: flex;
-            gap: 1.5rem;
-            margin: 1rem 0;
-            flex-wrap: wrap;
-        }
-
-        .recipe-meta span {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-size: 0.9rem;
-            color: var(--gray);
-        }
-
-        .recipe-desc {
-            color: var(--gray);
-            margin-bottom: 1.5rem;
-            flex-grow: 1;
-        }
-
-        .ingredients, .preparation {
-            margin: 1.5rem 0;
-        }
-
-        .ingredients h4, .preparation h4 {
-            color: var(--primary);
-            margin-bottom: 0.8rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-size: 1.1rem;
-        }
-
-        .ingredients ul, .preparation ol {
-            margin-left: 1.5rem;
-        }
-
-        .ingredients li, .preparation li {
-            margin-bottom: 0.5rem;
-            color: var(--gray);
-            position: relative;
-        }
-
-        .ingredients li::before {
-            content: '•';
-            color: var(--primary);
-            font-weight: bold;
-            display: inline-block;
-            width: 1em;
-            margin-left: -1em;
-        }
-
-        .preparation li {
-            counter-increment: step;
-        }
-
-        .preparation li::before {
-            content: counter(step);
-            background: var(--primary);
-            color: white;
-            width: 1.5em;
-            height: 1.5em;
-            border-radius: 50%;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.8rem;
-            margin-right: 0.5rem;
-            margin-left: -2rem;
-        }
-
-        /* Botones de acción */
-        .card-actions {
-            display: flex;
-            gap: 1rem;
-            margin-top: auto;
-        }
-
-        .btn-favorite, .btn-timer {
-            flex: 1;
-            padding: 0.8rem 1rem;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: var(--transition);
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-        }
-
-        .btn-favorite {
-            background: #f8f9fa;
-            border: 2px solid #e9ecef;
-            color: var(--gray);
-        }
-
-        .btn-favorite.active {
-            background: var(--primary);
-            border-color: var(--primary);
-            color: white;
-        }
-
-        .btn-favorite:hover {
-            transform: translateY(-2px);
-        }
-
-        .btn-timer {
-            background: var(--secondary);
-            color: white;
-        }
-
-        .btn-timer:hover {
-            background: var(--success);
-            transform: translateY(-2px);
-        }
-
-        /* Favoritos vacíos */
-        .empty-favorites {
-            text-align: center;
-            padding: 4rem 2rem;
-            color: var(--gray);
-            grid-column: 1 / -1;
-        }
-
-        .empty-favorites i {
-            font-size: 4rem;
-            margin-bottom: 1.5rem;
-            color: var(--primary);
-            opacity: 0.7;
-        }
-
-        /* Timer */
-        #timer {
-            position: fixed;
-            bottom: 2rem;
-            right: 2rem;
-            background: var(--light);
-            padding: 1.5rem;
-            border-radius: var(--border-radius);
-            box-shadow: var(--shadow);
-            z-index: 1000;
-            border: 3px solid var(--primary);
-            min-width: 250px;
-        }
-
-        .timer-hidden {
-            display: none;
-        }
-
-        .timer-content {
-            text-align: center;
-        }
-
-        #timer-display {
-            font-size: 2.5rem;
-            font-weight: bold;
-            margin: 1rem 0;
-            color: var(--primary);
-            font-family: monospace;
-            letter-spacing: 2px;
-        }
-
-        .timer-controls {
-            display: flex;
-            gap: 0.5rem;
-            justify-content: center;
-            margin-bottom: 1rem;
-        }
-
-        .timer-controls button {
-            background: var(--warning);
-            color: white;
-            border: none;
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            cursor: pointer;
-            transition: var(--transition);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .timer-controls button:hover {
-            transform: scale(1.1);
-        }
-
-        .btn-close-timer {
-            background: var(--gray);
-            color: white;
-            border: none;
-            padding: 0.5rem 1rem;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: var(--transition);
-            width: 100%;
-        }
-
-        .btn-close-timer:hover {
-            background: var(--danger);
-        }
-
-        /* Footer */
-        footer {
-            background: var(--darker);
-            color: white;
-            padding: 4rem 0 2rem;
-        }
-
-        .footer-content {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 3rem;
-            margin-bottom: 3rem;
-        }
-
-        .footer-column h3 {
-            font-size: 1.3rem;
-            margin-bottom: 1.5rem;
-            position: relative;
-            display: inline-block;
-        }
-
-        .footer-column h3::after {
-            content: '';
-            position: absolute;
-            bottom: -8px;
-            left: 0;
-            width: 40px;
-            height: 3px;
-            background: var(--primary);
-        }
-
-        .footer-links li {
-            margin-bottom: 0.8rem;
-        }
-
-        .footer-links a {
-            color: var(--gray-light);
-            transition: var(--transition);
-        }
-
-        .footer-links a:hover {
-            color: white;
-            padding-left: 5px;
-        }
-
-        .footer-bottom {
-            text-align: center;
-            padding-top: 2rem;
-            border-top: 1px solid rgba(255,255,255,0.1);
-            color: var(--gray-light);
-            font-size: 0.9rem;
-        }
-
-        /* Animaciones */
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .fade-in {
-            animation: fadeIn 0.8s ease forwards;
-        }
-
-        /* Responsive */
-        @media (max-width: 992px) {
-            h1 {
-                font-size: 3rem;
-            }
-            
-            h2 {
-                font-size: 2.2rem;
-            }
-            
-            .hero h1 {
-                font-size: 3rem;
-            }
-            
-            .recipes-grid {
-                grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            }
-        }
-
-        @media (max-width: 768px) {
-            .header-content {
-                flex-direction: column;
-                gap: 1rem;
-                text-align: center;
-            }
-            
-            .nav-container {
-                flex-direction: column;
-                gap: 1rem;
-            }
-            
-            .nav-links {
-                flex-wrap: wrap;
-                justify-content: center;
-            }
-            
-            .hero {
-                padding: 150px 0 80px;
-            }
-            
-            .hero h1 {
-                font-size: 2.5rem;
-            }
-            
-            .hero p {
-                font-size: 1.1rem;
-            }
-            
-            .recipes-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .card-actions {
-                flex-direction: column;
-            }
-            
-            #timer {
-                bottom: 1rem;
-                right: 1rem;
-                left: 1rem;
-            }
-            
-            .footer-content {
-                grid-template-columns: 1fr;
-                gap: 2rem;
-            }
-        }
-
-        @media (max-width: 576px) {
-            h1 {
-                font-size: 2.5rem;
-            }
-            
-            h2 {
-                font-size: 2rem;
-            }
-            
-            section {
-                padding: 60px 0;
-            }
-            
-            .hero h1 {
-                font-size: 2rem;
-            }
-        }
-
-        /* Utilidades */
-        .hidden {
-            display: none;
-        }
-
-        .text-center {
-            text-align: center;
-        }
-
-        .mt-2 {
-            margin-top: 2rem;
-        }
-    </style>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <!-- Header -->
@@ -842,6 +40,15 @@
                     <li><a href="#selva" class="nav-link"><i class="fas fa-leaf"></i> Selva</a></li>
                     <li><a href="#favoritos" class="nav-link"><i class="fas fa-heart"></i> Favoritos</a></li>
                 </ul>
+                
+                <!-- Barra de búsqueda -->
+                <div class="search-container">
+                    <div class="search-box">
+                        <input type="text" id="searchInput" placeholder="Buscar recetas...">
+                        <button id="searchBtn"><i class="fas fa-search"></i></button>
+                        <button id="voiceSearchBtn"><i class="fas fa-microphone"></i></button>
+                    </div>
+                </div>
             </div>
         </div>
     </nav>
@@ -869,7 +76,7 @@
             <div class="recipes-grid">
                 
                 <!-- Ceviche Ancestral -->
-                <div class="recipe-card fade-in" data-time="30" data-difficulty="facil">
+                <div class="recipe-card fade-in" data-time="30" data-difficulty="facil" data-id="ceviche-ancestral">
                     <div class="card-header">
                         <img src="https://images.unsplash.com/photo-1626700051175-6818013e0571?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Ceviche Ancestral">
                         <div class="card-overlay">
@@ -916,12 +123,15 @@
                             <button class="btn-timer" onclick="startTimer(30, this)">
                                 <i class="fas fa-clock"></i> Timer
                             </button>
+                            <button class="btn-view" onclick="viewRecipe('ceviche-ancestral')">
+                                <i class="fas fa-expand"></i> Ver más
+                            </button>
                         </div>
                     </div>
                 </div>
 
                 <!-- Causa Limeña Prehispánica -->
-                <div class="recipe-card fade-in" data-time="45" data-difficulty="medio">
+                <div class="recipe-card fade-in" data-time="45" data-difficulty="medio" data-id="causa-limeña">
                     <div class="card-header">
                         <img src="https://images.unsplash.com/photo-1544025162-d76694265947?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Causa Limeña">
                         <div class="card-overlay">
@@ -968,6 +178,9 @@
                             <button class="btn-timer" onclick="startTimer(45, this)">
                                 <i class="fas fa-clock"></i> Timer
                             </button>
+                            <button class="btn-view" onclick="viewRecipe('causa-limeña')">
+                                <i class="fas fa-expand"></i> Ver más
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -987,7 +200,7 @@
             <div class="recipes-grid">
                 
                 <!-- Pachamanca Ancestral -->
-                <div class="recipe-card fade-in" data-time="240" data-difficulty="dificil">
+                <div class="recipe-card fade-in" data-time="240" data-difficulty="dificil" data-id="pachamanca">
                     <div class="card-header">
                         <img src="https://images.unsplash.com/photo-1589302168068-964664d93dc0?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Pachamanca">
                         <div class="card-overlay">
@@ -1035,12 +248,15 @@
                             <button class="btn-timer" onclick="startTimer(240, this)">
                                 <i class="fas fa-clock"></i> Timer
                             </button>
+                            <button class="btn-view" onclick="viewRecipe('pachamanca')">
+                                <i class="fas fa-expand"></i> Ver más
+                            </button>
                         </div>
                     </div>
                 </div>
 
                 <!-- Olluquito con Charqui -->
-                <div class="recipe-card fade-in" data-time="60" data-difficulty="medio">
+                <div class="recipe-card fade-in" data-time="60" data-difficulty="medio" data-id="olluquito">
                     <div class="card-header">
                         <img src="https://images.unsplash.com/photo-1543339494-b4cd4a7ea616?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Olluquito">
                         <div class="card-overlay">
@@ -1087,6 +303,9 @@
                             <button class="btn-timer" onclick="startTimer(60, this)">
                                 <i class="fas fa-clock"></i> Timer
                             </button>
+                            <button class="btn-view" onclick="viewRecipe('olluquito')">
+                                <i class="fas fa-expand"></i> Ver más
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -1106,7 +325,7 @@
             <div class="recipes-grid">
                 
                 <!-- Tacacho con Cecina -->
-                <div class="recipe-card fade-in" data-time="40" data-difficulty="medio">
+                <div class="recipe-card fade-in" data-time="40" data-difficulty="medio" data-id="tacacho">
                     <div class="card-header">
                         <img src="https://images.unsplash.com/photo-1455619452474-d2be8b1e70cd?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Tacacho con Cecina">
                         <div class="card-overlay">
@@ -1152,12 +371,15 @@
                             <button class="btn-timer" onclick="startTimer(40, this)">
                                 <i class="fas fa-clock"></i> Timer
                             </button>
+                            <button class="btn-view" onclick="viewRecipe('tacacho')">
+                                <i class="fas fa-expand"></i> Ver más
+                            </button>
                         </div>
                     </div>
                 </div>
 
                 <!-- Juane de Gallina -->
-                <div class="recipe-card fade-in" data-time="90" data-difficulty="medio">
+                <div class="recipe-card fade-in" data-time="90" data-difficulty="medio" data-id="juane">
                     <div class="card-header">
                         <img src="https://images.unsplash.com/photo-1476224203421-9ac39bcb3327?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Juane de Gallina">
                         <div class="card-overlay">
@@ -1204,6 +426,9 @@
                             <button class="btn-timer" onclick="startTimer(90, this)">
                                 <i class="fas fa-clock"></i> Timer
                             </button>
+                            <button class="btn-view" onclick="viewRecipe('juane')">
+                                <i class="fas fa-expand"></i> Ver más
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -1242,6 +467,14 @@
         </div>
     </div>
 
+    <!-- Modal para mostrar recetas -->
+    <div id="recipeModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <div id="modalRecipeContent"></div>
+        </div>
+    </div>
+
     <!-- Footer -->
     <footer>
         <div class="container">
@@ -1276,359 +509,6 @@
         </div>
     </footer>
 
-    <script>
-        // Variables globales
-        let currentTimer = null;
-        let timerInterval = null;
-        let timeLeft = 0;
-        let isTimerRunning = false;
-
-        // Inicializar cuando cargue la página
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log('🍲 Sabores Ancestrales Perú cargado! 🌄');
-            
-            // Cargar modo oscuro si estaba guardado
-            loadDarkMode();
-            
-            // Cargar favoritos
-            loadFavorites();
-            
-            // Configurar el botón de modo oscuro
-            document.getElementById('darkModeToggle').addEventListener('click', toggleDarkMode);
-            
-            // Configurar navegación suave
-            setupSmoothScroll();
-            
-            // Configurar animaciones de scroll
-            setupScrollAnimations();
-            
-            // Mostrar mensaje de bienvenida
-            setTimeout(() => {
-                showNotification('🌄 Bienvenido a Sabores Ancestrales Perú', 'success');
-            }, 1000);
-        });
-
-        // Modo oscuro
-        function toggleDarkMode() {
-            const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-            
-            if (isDark) {
-                document.documentElement.removeAttribute('data-theme');
-                localStorage.setItem('darkMode', 'false');
-                document.querySelector('#darkModeToggle i').className = 'fas fa-moon';
-                showNotification('☀️ Modo claro activado');
-            } else {
-                document.documentElement.setAttribute('data-theme', 'dark');
-                localStorage.setItem('darkMode', 'true');
-                document.querySelector('#darkModeToggle i').className = 'fas fa-sun';
-                showNotification('🌙 Modo oscuro activado');
-            }
-        }
-
-        function loadDarkMode() {
-            const darkMode = localStorage.getItem('darkMode') === 'true';
-            if (darkMode) {
-                document.documentElement.setAttribute('data-theme', 'dark');
-                document.querySelector('#darkModeToggle i').className = 'fas fa-sun';
-            }
-        }
-
-        // Sistema de favoritos
-        function toggleFavorite(button) {
-            const card = button.closest('.recipe-card');
-            const recipeTitle = card.querySelector('h3').textContent;
-            const recipeSection = card.closest('.recipe-section').id;
-            
-            // Obtener favoritos actuales
-            let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
-            
-            // Buscar si ya existe
-            const existingIndex = favorites.findIndex(fav => fav.title === recipeTitle);
-            
-            if (existingIndex !== -1) {
-                // Quitar de favoritos
-                favorites.splice(existingIndex, 1);
-                button.classList.remove('active');
-                button.innerHTML = '<i class="far fa-heart"></i> Favorito';
-                showNotification(`💔 "${recipeTitle}" removido de favoritos`);
-            } else {
-                // Agregar a favoritos
-                const recipeData = {
-                    title: recipeTitle,
-                    section: recipeSection,
-                    time: card.dataset.time,
-                    difficulty: card.dataset.difficulty,
-                    image: card.querySelector('img').src,
-                    description: card.querySelector('.recipe-desc').textContent
-                };
-                
-                favorites.push(recipeData);
-                button.classList.add('active');
-                button.innerHTML = '<i class="fas fa-heart"></i> En Favoritos';
-                showNotification(`❤️ "${recipeTitle}" agregado a favoritos`);
-            }
-            
-            // Guardar en localStorage
-            localStorage.setItem('favorites', JSON.stringify(favorites));
-            
-            // Actualizar sección de favoritos
-            updateFavoritesSection();
-        }
-
-        function loadFavorites() {
-            const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
-            
-            // Marcar botones de favoritos
-            document.querySelectorAll('.recipe-card').forEach(card => {
-                const title = card.querySelector('h3').textContent;
-                const button = card.querySelector('.btn-favorite');
-                const isFavorite = favorites.some(fav => fav.title === title);
-                
-                if (isFavorite) {
-                    button.classList.add('active');
-                    button.innerHTML = '<i class="fas fa-heart"></i> En Favoritos';
-                }
-            });
-            
-            updateFavoritesSection();
-        }
-
-        function updateFavoritesSection() {
-            const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
-            const container = document.getElementById('favorites-container');
-            
-            if (favorites.length === 0) {
-                container.innerHTML = `
-                    <div class="empty-favorites">
-                        <i class="fas fa-heart-broken"></i>
-                        <h3>Aún no tienes recetas favoritas</h3>
-                        <p>Haz clic en el corazón de las recetas que más te gusten para agregarlas a esta sección.</p>
-                    </div>
-                `;
-                return;
-            }
-            
-            // Mostrar recetas favoritas
-            container.innerHTML = favorites.map(recipe => `
-                <div class="recipe-card" data-time="${recipe.time}" data-difficulty="${recipe.difficulty}">
-                    <div class="card-header">
-                        <img src="${recipe.image}" alt="${recipe.title}">
-                        <div class="card-overlay">
-                            <span class="card-badge ${recipe.difficulty}">${getDifficultyText(recipe.difficulty)}</span>
-                        </div>
-                    </div>
-                    <div class="recipe-content">
-                        <h3>${recipe.title}</h3>
-                        <div class="recipe-meta">
-                            <span><i class="fas fa-clock"></i> ${recipe.time}min</span>
-                            <span><i class="fas fa-map-marker-alt"></i> ${getRegionName(recipe.section)}</span>
-                        </div>
-                        <p class="recipe-desc">${recipe.description}</p>
-                        <div class="card-actions">
-                            <button class="btn-favorite active" onclick="toggleFavorite(this)">
-                                <i class="fas fa-heart"></i> En Favoritos
-                            </button>
-                            <button class="btn-timer" onclick="startTimer(${recipe.time}, this)">
-                                <i class="fas fa-clock"></i> Timer
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        function getDifficultyText(difficulty) {
-            const texts = {
-                'facil': 'Fácil',
-                'medio': 'Medio',
-                'dificil': 'Tradicional'
-            };
-            return texts[difficulty] || difficulty;
-        }
-
-        function getRegionName(section) {
-            const regions = {
-                'costa': 'Costa',
-                'sierra': 'Sierra',
-                'selva': 'Selva'
-            };
-            return regions[section] || section;
-        }
-
-        // Timer de cocina
-        function startTimer(minutes, button) {
-            // Detener timer anterior si existe
-            if (timerInterval) {
-                clearInterval(timerInterval);
-            }
-            
-            timeLeft = minutes * 60;
-            isTimerRunning = true;
-            
-            // Mostrar timer
-            const timer = document.getElementById('timer');
-            timer.classList.remove('timer-hidden');
-            
-            // Actualizar display
-            updateTimerDisplay();
-            
-            // Iniciar cuenta regresiva
-            timerInterval = setInterval(() => {
-                if (timeLeft > 0 && isTimerRunning) {
-                    timeLeft--;
-                    updateTimerDisplay();
-                } else if (timeLeft === 0) {
-                    clearInterval(timerInterval);
-                    showNotification('🎉 ¡Tiempo completado! Tu platillo ancestral está listo', 'success');
-                    // Sonido opcional
-                    try {
-                        const audio = new Audio('data:audio/wav;base64,UklGRigAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQQAAAAAAA==');
-                        audio.play();
-                    } catch (e) {}
-                }
-            }, 1000);
-            
-            showNotification(`⏱️ Timer iniciado: ${minutes} minutos`);
-        }
-
-        function pauseTimer() {
-            isTimerRunning = !isTimerRunning;
-            showNotification(isTimerRunning ? '▶️ Timer reanudado' : '⏸️ Timer pausado');
-        }
-
-        function resetTimer() {
-            clearInterval(timerInterval);
-            timerInterval = null;
-            timeLeft = 0;
-            isTimerRunning = false;
-            document.getElementById('timer').classList.add('timer-hidden');
-            showNotification('🛑 Timer detenido');
-        }
-
-        function hideTimer() {
-            document.getElementById('timer').classList.add('timer-hidden');
-        }
-
-        function updateTimerDisplay() {
-            const minutes = Math.floor(timeLeft / 60);
-            const seconds = timeLeft % 60;
-            const display = document.getElementById('timer-display');
-            display.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-            
-            // Cambiar color cuando quede poco tiempo
-            if (timeLeft < 60) {
-                display.style.color = 'var(--danger)';
-            } else {
-                display.style.color = 'var(--primary)';
-            }
-        }
-
-        // Navegación suave
-        function setupSmoothScroll() {
-            document.querySelectorAll('nav a').forEach(link => {
-                link.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    const targetId = this.getAttribute('href');
-                    const targetSection = document.querySelector(targetId);
-                    
-                    if (targetSection) {
-                        // Actualizar navegación activa
-                        document.querySelectorAll('.nav-link').forEach(navLink => {
-                            navLink.classList.remove('active');
-                        });
-                        this.classList.add('active');
-                        
-                        targetSection.scrollIntoView({
-                            behavior: 'smooth',
-                            block: 'start'
-                        });
-                    }
-                });
-            });
-        }
-
-        // Animaciones al hacer scroll
-        function setupScrollAnimations() {
-            const observerOptions = {
-                threshold: 0.1,
-                rootMargin: '0px 0px -50px 0px'
-            };
-
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('fade-in');
-                    }
-                });
-            }, observerOptions);
-
-            // Observar todas las tarjetas de recetas
-            document.querySelectorAll('.recipe-card').forEach(card => {
-                observer.observe(card);
-            });
-        }
-
-        // Notificaciones
-        function showNotification(message, type = 'info') {
-            // Crear elemento de notificación
-            const notification = document.createElement('div');
-            notification.textContent = message;
-            notification.style.cssText = `
-                position: fixed;
-                top: 120px;
-                right: 20px;
-                background: ${type === 'success' ? 'var(--success)' : 'var(--primary)'};
-                color: white;
-                padding: 1rem 1.5rem;
-                border-radius: 10px;
-                box-shadow: var(--shadow);
-                z-index: 1000;
-                animation: slideInRight 0.3s ease;
-                max-width: 300px;
-                font-weight: 500;
-            `;
-            
-            document.body.appendChild(notification);
-            
-            // Remover después de 4 segundos
-            setTimeout(() => {
-                notification.style.animation = 'slideOutRight 0.3s ease';
-                setTimeout(() => {
-                    if (notification.parentElement) {
-                        notification.parentElement.removeChild(notification);
-                    }
-                }, 300);
-            }, 4000);
-        }
-
-        // Añadir los keyframes para las animaciones
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes slideInRight {
-                from {
-                    transform: translateX(100%);
-                    opacity: 0;
-                }
-                to {
-                    transform: translateX(0);
-                    opacity: 1;
-                }
-            }
-            
-            @keyframes slideOutRight {
-                from {
-                    transform: translateX(0);
-                    opacity: 1;
-                }
-                to {
-                    transform: translateX(100%);
-                    opacity: 0;
-                }
-            }
-        `;
-        document.head.appendChild(style);
-
-        console.log('✅ ¡Sabores Ancestrales Perú cargado correctamente!');
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
