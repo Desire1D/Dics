@@ -3,30 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🍳 Recetas Pro :V</title>
+    <title>🍲 Sabores Ancestrales Perú</title>
     <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <!-- Reproductor de música -->
-    <audio id="backgroundMusic" loop>
-        <source src="phonk.mp3" type="audio/mpeg">
-        Tu navegador no soporta el elemento de audio.
-    </audio>
-
-    <!-- Botón para controlar la música -->
-    <button id="musicToggle" class="music-btn">
-        <i class="fas fa-volume-mute"></i>
-    </button>
-
     <!-- Header -->
     <header>
         <div class="container">
             <div class="header-content">
                 <div class="logo">
-                    <h1>🍳 Recetas Pro <span class="emoji">:V</span></h1>
-                    <p>¡Cocina como un chef! :V</p>
+                    <h1>🍲 Sabores Ancestrales Perú</h1>
+                    <p>Rescatando la tradición culinaria milenaria 🌄</p>
                 </div>
                 <button id="darkModeToggle" class="mode-btn">
                     <i class="fas fa-moon"></i>
@@ -39,207 +28,57 @@
     <nav>
         <div class="container">
             <ul>
-                <li><a href="#entradas"><i class="fas fa-leaf"></i> Entradas</a></li>
-                <li><a href="#principales"><i class="fas fa-utensils"></i> Principales</a></li>
-                <li><a href="#postres"><i class="fas fa-ice-cream"></i> Postres</a></li>
+                <li><a href="#costa"><i class="fas fa-fish"></i> Costa</a></li>
+                <li><a href="#sierra"><i class="fas fa-mountain"></i> Sierra</a></li>
+                <li><a href="#selva"><i class="fas fa-leaf"></i> Selva</a></li>
                 <li><a href="#favoritos"><i class="fas fa-heart"></i> Favoritos</a></li>
             </ul>
         </div>
     </nav>
 
     <main class="container">
-        <!-- Sección de Entradas -->
-        <section id="entradas" class="recipe-section">
-            <h2><i class="fas fa-leaf"></i> 🥗 Entradas Frescas</h2>
+        <!-- Sección Costa -->
+        <section id="costa" class="recipe-section">
+            <h2><i class="fas fa-fish"></i> 🐟 Costa Peruana</h2>
+            <p class="section-desc">Sabores del mar y valles costeños con influencia precolombina</p>
             <div class="recipes-grid">
                 
-                <!-- Receta 1 -->
-                <div class="recipe-card" data-time="15" data-difficulty="facil">
-                    <div class="card-header">
-                        <img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Ensalada César">
-                        <div class="card-badge facil">Fácil :V</div>
-                    </div>
-                    <div class="recipe-content">
-                        <h3>Ensalada César Pro</h3>
-                        <div class="recipe-meta">
-                            <span><i class="fas fa-clock"></i> 15min</span>
-                            <span><i class="fas fa-users"></i> 2 personas</span>
-                            <span><i class="fas fa-fire"></i> 180cal</span>
-                        </div>
-                        <p class="recipe-desc">La clásica ensalada con un toque gourmet :V</p>
-                        
-                        <div class="ingredients">
-                            <h4><i class="fas fa-list"></i> Ingredientes:</h4>
-                            <ul>
-                                <li>1 lechuga romana</li>
-                                <li>50g queso parmesano</li>
-                                <li>100g pollo a la plancha</li>
-                                <li>2 rebanadas de pan</li>
-                                <li>3 cdas aderezo césar</li>
-                            </ul>
-                        </div>
-
-                        <div class="preparation">
-                            <h4><i class="fas fa-blender"></i> Preparación:</h4>
-                            <ol>
-                                <li>Lavar y cortar la lechuga</li>
-                                <li>Dorar el pan para crutones</li>
-                                <li>Cocinar el pollo a la plancha</li>
-                                <li>Mezclar todo con el aderezo</li>
-                                <li>¡Servir y disfrutar! :V</li>
-                            </ol>
-                        </div>
-
-                        <div class="card-actions">
-                            <button class="btn-favorite" onclick="toggleFavorite(this)">
-                                <i class="far fa-heart"></i> Favorito
-                            </button>
-                            <button class="btn-timer" onclick="startTimer(15, this)">
-                                <i class="fas fa-clock"></i> Timer
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Receta 2 -->
-                <div class="recipe-card" data-time="25" data-difficulty="medio">
-                    <div class="card-header">
-                        <img src="https://images.unsplash.com/photo-1482049016688-2d3e1b311543?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Bruschetta">
-                        <div class="card-badge medio">Medio</div>
-                    </div>
-                    <div class="recipe-content">
-                        <h3>Bruschetta Italiana</h3>
-                        <div class="recipe-meta">
-                            <span><i class="fas fa-clock"></i> 25min</span>
-                            <span><i class="fas fa-users"></i> 4 personas</span>
-                            <span><i class="fas fa-fire"></i> 220cal</span>
-                        </div>
-                        <p class="recipe-desc">Pan crujiente con tomate y albahaca :V</p>
-                        
-                        <div class="ingredients">
-                            <h4><i class="fas fa-list"></i> Ingredientes:</h4>
-                            <ul>
-                                <li>8 rebanadas pan baguette</li>
-                                <li>4 tomates maduros</li>
-                                <li>2 dientes de ajo</li>
-                                <li>Hojas de albahaca fresca</li>
-                                <li>Aceite de oliva</li>
-                            </ul>
-                        </div>
-
-                        <div class="preparation">
-                            <h4><i class="fas fa-blender"></i> Preparación:</h4>
-                            <ol>
-                                <li>Tostar el pan en el horno</li>
-                                <li>Picar tomates y albahaca</li>
-                                <li>Mezclar con ajo y aceite</li>
-                                <li>Colocar sobre el pan tostado</li>
-                                <li>¡Servir inmediatamente! :V</li>
-                            </ol>
-                        </div>
-
-                        <div class="card-actions">
-                            <button class="btn-favorite" onclick="toggleFavorite(this)">
-                                <i class="far fa-heart"></i> Favorito
-                            </button>
-                            <button class="btn-timer" onclick="startTimer(25, this)">
-                                <i class="fas fa-clock"></i> Timer
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </section>
-
-        <!-- Sección de Platos Principales -->
-        <section id="principales" class="recipe-section">
-            <h2><i class="fas fa-utensils"></i> 🍝 Platos Principales</h2>
-            <div class="recipes-grid">
-                
-                <!-- Receta 1 -->
-                <div class="recipe-card" data-time="45" data-difficulty="medio">
-                    <div class="card-header">
-                        <img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Pizza">
-                        <div class="card-badge medio">Medio</div>
-                    </div>
-                    <div class="recipe-content">
-                        <h3>Pizza Casera Pro</h3>
-                        <div class="recipe-meta">
-                            <span><i class="fas fa-clock"></i> 45min</span>
-                            <span><i class="fas fa-users"></i> 3 personas</span>
-                            <span><i class="fas fa-fire"></i> 320cal</span>
-                        </div>
-                        <p class="recipe-desc">La pizza más crujiente que probarás :V</p>
-                        
-                        <div class="ingredients">
-                            <h4><i class="fas fa-list"></i> Ingredientes:</h4>
-                            <ul>
-                                <li>500g harina de fuerza</li>
-                                <li>300ml agua tibia</li>
-                                <li>25g levadura fresca</li>
-                                <li>200g salsa de tomate</li>
-                                <li>250g queso mozzarella</li>
-                                <li>Ingredientes al gusto</li>
-                            </ul>
-                        </div>
-
-                        <div class="preparation">
-                            <h4><i class="fas fa-blender"></i> Preparación:</h4>
-                            <ol>
-                                <li>Mezclar harina, agua y levadura</li>
-                                <li>Dejar reposar 1 hora</li>
-                                <li>Estirar la masa en pizza</li>
-                                <li>Añadir ingredientes</li>
-                                <li>Hornear 15min a 220°C</li>
-                            </ol>
-                        </div>
-
-                        <div class="card-actions">
-                            <button class="btn-favorite" onclick="toggleFavorite(this)">
-                                <i class="far fa-heart"></i> Favorito
-                            </button>
-                            <button class="btn-timer" onclick="startTimer(45, this)">
-                                <i class="fas fa-clock"></i> Timer
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Receta 2 -->
+                <!-- Ceviche Ancestral -->
                 <div class="recipe-card" data-time="30" data-difficulty="facil">
                     <div class="card-header">
-                        <img src="https://images.unsplash.com/photo-1563379926898-05f4575a45d8?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Pasta">
-                        <div class="card-badge facil">Fácil :V</div>
+                        <img src="https://images.unsplash.com/photo-1626700051175-6818013e0571?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Ceviche Ancestral">
+                        <div class="card-badge facil">Fácil</div>
                     </div>
                     <div class="recipe-content">
-                        <h3>Pasta Alfredo</h3>
+                        <h3>Ceviche Ancestral</h3>
                         <div class="recipe-meta">
                             <span><i class="fas fa-clock"></i> 30min</span>
-                            <span><i class="fas fa-users"></i> 2 personas</span>
-                            <span><i class="fas fa-fire"></i> 450cal</span>
+                            <span><i class="fas fa-users"></i> 4 personas</span>
+                            <span><i class="fas fa-fire"></i> 250cal</span>
                         </div>
-                        <p class="recipe-desc">Cremosa pasta que te hará feliz :V</p>
+                        <p class="recipe-desc">Preparación milenaria con técnicas moche</p>
                         
                         <div class="ingredients">
                             <h4><i class="fas fa-list"></i> Ingredientes:</h4>
                             <ul>
-                                <li>250g pasta fettuccine</li>
-                                <li>200ml crema para batir</li>
-                                <li>100g queso parmesano</li>
-                                <li>2 cdas mantequilla</li>
-                                <li>Nuez moscada y pimienta</li>
+                                <li>1 kg pescado blanco fresco</li>
+                                <li>10 limones tumbesinos</li>
+                                <li>2 ajíes limo</li>
+                                <li>1 cebolla morada</li>
+                                <li>Kion (jengibre) rallado</li>
+                                <li>Algas marinas (yuyo)</li>
+                                <li>Maíz tostado (cancha)</li>
                             </ul>
                         </div>
 
                         <div class="preparation">
-                            <h4><i class="fas fa-blender"></i> Preparación:</h4>
+                            <h4><i class="fas fa-blender"></i> Preparación Ancestral:</h4>
                             <ol>
-                                <li>Cocinar la pasta al dente</li>
-                                <li>Derretir mantequilla en sartén</li>
-                                <li>Añadir crema y queso</li>
-                                <li>Mezclar con la pasta cocida</li>
-                                <li>¡Servir con más queso! :V</li>
+                                <li>Cortar pescado en cubos al estilo moche</li>
+                                <li>Macerar con jugo de limón y kion por 15 min</li>
+                                <li>Añadir ají limo finamente picado</li>
+                                <li>Incorporar cebolla en pluma y algas</li>
+                                <li>Servir en mate con cancha serrana</li>
                             </ol>
                         </div>
 
@@ -254,49 +93,42 @@
                     </div>
                 </div>
 
-            </div>
-        </section>
-
-        <!-- Sección de Postres -->
-        <section id="postres" class="recipe-section">
-            <h2><i class="fas fa-ice-cream"></i> 🍰 Postres Deliciosos</h2>
-            <div class="recipes-grid">
-                
-                <!-- Receta 1 -->
-                <div class="recipe-card" data-time="20" data-difficulty="facil">
+                <!-- Causa Limeña Prehispánica -->
+                <div class="recipe-card" data-time="45" data-difficulty="medio">
                     <div class="card-header">
-                        <img src="https://images.unsplash.com/photo-1563729784474-d77dbb933a9e?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Brownie">
-                        <div class="card-badge facil">Fácil :V</div>
+                        <img src="https://images.unsplash.com/photo-1544025162-d76694265947?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Causa Limeña">
+                        <div class="card-badge medio">Medio</div>
                     </div>
                     <div class="recipe-content">
-                        <h3>Brownie Express</h3>
+                        <h3>Causa Limeña Prehispánica</h3>
                         <div class="recipe-meta">
-                            <span><i class="fas fa-clock"></i> 20min</span>
+                            <span><i class="fas fa-clock"></i> 45min</span>
                             <span><i class="fas fa-users"></i> 6 personas</span>
-                            <span><i class="fas fa-fire"></i> 380cal</span>
+                            <span><i class="fas fa-fire"></i> 320cal</span>
                         </div>
-                        <p class="recipe-desc">Brownie chocolatoso en 20 minutos :V</p>
+                        <p class="recipe-desc">Papa amarilla con rellenos tradicionales</p>
                         
                         <div class="ingredients">
                             <h4><i class="fas fa-list"></i> Ingredientes:</h4>
                             <ul>
-                                <li>200g chocolate negro</li>
-                                <li>150g mantequilla</li>
-                                <li>3 huevos</li>
-                                <li>200g azúcar</li>
-                                <li>100g harina</li>
-                                <li>100g nueces</li>
+                                <li>2 kg papa amarilla</li>
+                                <li>3 ajíes amarillos</li>
+                                <li>500g atún o pollo</li>
+                                <li>1 palta hass madura</li>
+                                <li>Huevos sancochados</li>
+                                <li>Aceitunas botija</li>
+                                <li>Lechuga costeña</li>
                             </ul>
                         </div>
 
                         <div class="preparation">
-                            <h4><i class="fas fa-blender"></i> Preparación:</h4>
+                            <h4><i class="fas fa-blender"></i> Preparación Tradicional:</h4>
                             <ol>
-                                <li>Derretir chocolate y mantequilla</li>
-                                <li>Batir huevos con azúcar</li>
-                                <li>Mezclar todo con harina</li>
-                                <li>Añadir nueces picadas</li>
-                                <li>Hornear 15min a 180°C</li>
+                                <li>Cocer papas y hacer puré con ají amarillo</li>
+                                <li>Preparar relleno de atún con mayonesa casera</li>
+                                <li>Armar en capas: papa, palta, relleno</li>
+                                <li>Decorar con huevo, aceitunas y lechuga</li>
+                                <li>Refrigerar 2 horas antes de servir</li>
                             </ol>
                         </div>
 
@@ -304,7 +136,225 @@
                             <button class="btn-favorite" onclick="toggleFavorite(this)">
                                 <i class="far fa-heart"></i> Favorito
                             </button>
-                            <button class="btn-timer" onclick="startTimer(20, this)">
+                            <button class="btn-timer" onclick="startTimer(45, this)">
+                                <i class="fas fa-clock"></i> Timer
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Sección Sierra -->
+        <section id="sierra" class="recipe-section">
+            <h2><i class="fas fa-mountain"></i> 🏔️ Sierra Andina</h2>
+            <p class="section-desc">Sabores de los Andes con ingredientes incaicos milenarios</p>
+            <div class="recipes-grid">
+                
+                <!-- Pachamanca Ancestral -->
+                <div class="recipe-card" data-time="240" data-difficulty="dificil">
+                    <div class="card-header">
+                        <img src="https://images.unsplash.com/photo-1589302168068-964664d93dc0?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Pachamanca">
+                        <div class="card-badge dificil">Tradicional</div>
+                    </div>
+                    <div class="recipe-content">
+                        <h3>Pachamanca Ancestral</h3>
+                        <div class="recipe-meta">
+                            <span><i class="fas fa-clock"></i> 4 horas</span>
+                            <span><i class="fas fa-users"></i> 8 personas</span>
+                            <span><i class="fas fa-fire"></i> 450cal</span>
+                        </div>
+                        <p class="recipe-desc">Cocción en tierra al estilo incaico</p>
+                        
+                        <div class="ingredients">
+                            <h4><i class="fas fa-list"></i> Ingredientes:</h4>
+                            <ul>
+                                <li>1 kg carne de cordero</li>
+                                <li>1 kg carne de cerdo</li>
+                                <li>1 kg pollo</li>
+                                <li>2 kg papas nativas</li>
+                                <li>1 kg habas verdes</li>
+                                <li>6 choclos andinos</li>
+                                <li>Hierbas aromáticas (huacatay)</li>
+                                <li>Piedras volcánicas</li>
+                            </ul>
+                        </div>
+
+                        <div class="preparation">
+                            <h4><i class="fas fa-blender"></i> Preparación Ancestral:</h4>
+                            <ol>
+                                <li>Calentar piedras en hoyo por 2 horas</li>
+                                <li>Marinar carnes con hierbas andinas</li>
+                                <li>Colocar en capas: piedras, carnes, verduras</li>
+                                <li>Cubrir con hojas de plátano y tierra</li>
+                                <li>Cocinar por 2 horas en hoyo de tierra</li>
+                            </ol>
+                        </div>
+
+                        <div class="card-actions">
+                            <button class="btn-favorite" onclick="toggleFavorite(this)">
+                                <i class="far fa-heart"></i> Favorito
+                            </button>
+                            <button class="btn-timer" onclick="startTimer(240, this)">
+                                <i class="fas fa-clock"></i> Timer
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Olluquito con Charqui -->
+                <div class="recipe-card" data-time="60" data-difficulty="medio">
+                    <div class="card-header">
+                        <img src="https://images.unsplash.com/photo-1543339494-b4cd4a7ea616?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Olluquito">
+                        <div class="card-badge medio">Medio</div>
+                    </div>
+                    <div class="recipe-content">
+                        <h3>Olluquito con Charqui</h3>
+                        <div class="recipe-meta">
+                            <span><i class="fas fa-clock"></i> 60min</span>
+                            <span><i class="fas fa-users"></i> 4 personas</span>
+                            <span><i class="fas fa-fire"></i> 380cal</span>
+                        </div>
+                        <p class="recipe-desc">Tubérculo andino con carne seca</p>
+                        
+                        <div class="ingredients">
+                            <h4><i class="fas fa-list"></i> Ingredientes:</h4>
+                            <ul>
+                                <li>1 kg olluco fresco</li>
+                                <li>300g charqui (carne seca)</li>
+                                <li>2 cebollas rojas</li>
+                                <li>3 dientes de ajo</li>
+                                <li>Ají panca molido</li>
+                                <li>Culantro picado</li>
+                                <li>Papas amarillas</li>
+                            </ul>
+                        </div>
+
+                        <div class="preparation">
+                            <h4><i class="fas fa-blender"></i> Preparación Andina:</h4>
+                            <ol>
+                                <li>Remojar charqui para desalar</li>
+                                <li>Pelar y cortar ollucos en tiras</li>
+                                <li>Sofreír cebolla, ajo y ají panca</li>
+                                <li>Agregar charqui desmenuzado</li>
+                                <li>Incorporar ollucos y cocinar 30 min</li>
+                            </ol>
+                        </div>
+
+                        <div class="card-actions">
+                            <button class="btn-favorite" onclick="toggleFavorite(this)">
+                                <i class="far fa-heart"></i> Favorito
+                            </button>
+                            <button class="btn-timer" onclick="startTimer(60, this)">
+                                <i class="fas fa-clock"></i> Timer
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Sección Selva -->
+        <section id="selva" class="recipe-section">
+            <h2><i class="fas fa-leaf"></i> 🌴 Selva Amazónica</h2>
+            <p class="section-desc">Sabores exóticos de la biodiversidad amazónica</p>
+            <div class="recipes-grid">
+                
+                <!-- Tacacho con Cecina -->
+                <div class="recipe-card" data-time="40" data-difficulty="medio">
+                    <div class="card-header">
+                        <img src="https://images.unsplash.com/photo-1455619452474-d2be8b1e70cd?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Tacacho con Cecina">
+                        <div class="card-badge medio">Medio</div>
+                    </div>
+                    <div class="recipe-content">
+                        <h3>Tacacho con Cecina</h3>
+                        <div class="recipe-meta">
+                            <span><i class="fas fa-clock"></i> 40min</span>
+                            <span><i class="fas fa-users"></i> 4 personas</span>
+                            <span><i class="fas fa-fire"></i> 420cal</span>
+                        </div>
+                        <p class="recipe-desc">Plátano verde con carne ahumada</p>
+                        
+                        <div class="ingredients">
+                            <h4><i class="fas fa-list"></i> Ingredientes:</h4>
+                            <ul>
+                                <li>6 plátanos verdes</li>
+                                <li>500g cecina (carne ahumada)</li>
+                                <li>200g manteca de chancho</li>
+                                <li>Chorizo amazónico</li>
+                                <li>Sal y ajos molidos</li>
+                                <li>Hojas de bijao</li>
+                            </ul>
+                        </div>
+
+                        <div class="preparation">
+                            <h4><i class="fas fa-blender"></i> Preparación Amazónica:</h4>
+                            <ol>
+                                <li>Asar plátanos verdes en carbón</li>
+                                <li>Majar plátanos con manteca</li>
+                                <li>Formar bolitas de tacacho</li>
+                                <li>Asar cecina y chorizo a la parrilla</li>
+                                <li>Servir en hojas de bijao</li>
+                            </ol>
+                        </div>
+
+                        <div class="card-actions">
+                            <button class="btn-favorite" onclick="toggleFavorite(this)">
+                                <i class="far fa-heart"></i> Favorito
+                            </button>
+                            <button class="btn-timer" onclick="startTimer(40, this)">
+                                <i class="fas fa-clock"></i> Timer
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Juane de Gallina -->
+                <div class="recipe-card" data-time="90" data-difficulty="medio">
+                    <div class="card-header">
+                        <img src="https://images.unsplash.com/photo-1476224203421-9ac39bcb3327?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Juane de Gallina">
+                        <div class="card-badge medio">Tradicional</div>
+                    </div>
+                    <div class="recipe-content">
+                        <h3>Juane de Gallina</h3>
+                        <div class="recipe-meta">
+                            <span><i class="fas fa-clock"></i> 90min</span>
+                            <span><i class="fas fa-users"></i> 6 personas</span>
+                            <span><i class="fas fa-fire"></i> 350cal</span>
+                        </div>
+                        <p class="recipe-desc">Plato ritual de la fiesta de San Juan</p>
+                        
+                        <div class="ingredients">
+                            <h4><i class="fas fa-list"></i> Ingredientes:</h4>
+                            <ul>
+                                <li>1 gallina criolla</li>
+                                <li>4 tazas de arroz</li>
+                                <li>Huevos duros</li>
+                                <li>Aceitunas y pasas</li>
+                                <li>Hojas de bijao</li>
+                                <li>Palillo (cúrcuma)</li>
+                                <li>Hierbas aromáticas</li>
+                            </ul>
+                        </div>
+
+                        <div class="preparation">
+                            <h4><i class="fas fa-blender"></i> Preparación Ritual:</h4>
+                            <ol>
+                                <li>Cocinar gallina con hierbas aromáticas</li>
+                                <li>Preparar arroz con palillo y caldo</li>
+                                <li>Forrar hojas de bijao con arroz</li>
+                                <li>Rellenar con gallina, huevo y aceitunas</li>
+                                <li>Amarrar y cocinar 45 minutos</li>
+                            </ol>
+                        </div>
+
+                        <div class="card-actions">
+                            <button class="btn-favorite" onclick="toggleFavorite(this)">
+                                <i class="far fa-heart"></i> Favorito
+                            </button>
+                            <button class="btn-timer" onclick="startTimer(90, this)">
                                 <i class="fas fa-clock"></i> Timer
                             </button>
                         </div>
@@ -316,12 +366,12 @@
 
         <!-- Sección de Favoritos -->
         <section id="favoritos" class="recipe-section">
-            <h2><i class="fas fa-heart"></i> ❤️ Tus Favoritos</h2>
+            <h2><i class="fas fa-heart"></i> ❤️ Recetas Favoritas</h2>
             <div id="favorites-container" class="recipes-grid">
                 <div class="empty-favorites">
                     <i class="fas fa-heart-broken"></i>
-                    <h3>Aún no tienes favoritos</h3>
-                    <p>¡Haz clic en el corazón de las recetas que te gusten!</p>
+                    <h3>Aún no tienes recetas favoritas</h3>
+                    <p>¡Haz clic en el corazón de las recetas que te gusten para rescatarlas!</p>
                 </div>
             </div>
         </section>
@@ -331,7 +381,7 @@
     <!-- Timer Flotante -->
     <div id="timer" class="timer-hidden">
         <div class="timer-content">
-            <h3><i class="fas fa-clock"></i> Timer de Cocina</h3>
+            <h3><i class="fas fa-clock"></i> Timer Ancestral</h3>
             <div id="timer-display">00:00</div>
             <div class="timer-controls">
                 <button onclick="pauseTimer()"><i class="fas fa-pause"></i></button>
@@ -343,7 +393,10 @@
 
     <footer>
         <div class="container">
-            <p>© 2024 Recetas Pro :V - Hecho con ❤️ y mucho :V</p>
+            <p>© 2024 Sabores Ancestrales Perú - Rescatando nuestra herencia culinaria milenaria 🌄</p>
+            <p style="margin-top: 0.5rem; font-size: 0.9rem; opacity: 0.8;">
+                "La comida no solo alimenta el cuerpo, sino también el alma de nuestros ancestros"
+            </p>
         </div>
     </footer>
 
