@@ -3,6 +3,8 @@ let currentTimer = null;
 let timerInterval = null;
 let timeLeft = 0;
 let isTimerRunning = false;
+let recognition = null;
+let isListening = false;
 
 // Inicializar cuando cargue la página
 document.addEventListener('DOMContentLoaded', function() {
@@ -25,6 +27,15 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Configurar navegación activa
     setupActiveNavigation();
+    
+    // Configurar búsqueda
+    setupSearch();
+    
+    // Configurar búsqueda por voz
+    setupVoiceSearch();
+    
+    // Configurar modal
+    setupModal();
     
     // Mostrar mensaje de bienvenida
     setTimeout(() => {
@@ -86,7 +97,8 @@ function toggleFavorite(button) {
             image: card.querySelector('img').src,
             description: card.querySelector('.recipe-desc').textContent,
             ingredients: Array.from(card.querySelectorAll('.ingredients li')).map(li => li.textContent),
-            preparation: Array.from(card.querySelectorAll('.preparation li')).map(li => li.textContent)
+            preparation: Array.from(card.querySelectorAll('.preparation li')).map(li => li.textContent),
+            id: card.dataset.id
         };
         
         favorites.push(recipeData);
@@ -139,7 +151,7 @@ function updateFavoritesSection() {
     
     // Mostrar recetas favoritas
     container.innerHTML = favorites.map(recipe => `
-        <div class="recipe-card favorite-recipe" data-time="${recipe.time}" data-difficulty="${recipe.difficulty}">
+        <div class="recipe-card favorite-recipe" data-time="${recipe.time}" data-difficulty="${recipe.difficulty}" data-id="${recipe.id}">
             <div class="card-header">
                 <img src="${recipe.image}" alt="${recipe.title}">
                 <div class="card-overlay">
@@ -179,6 +191,9 @@ function updateFavoritesSection() {
                     </button>
                     <button class="btn-timer" onclick="startTimer(${recipe.time}, this)">
                         <i class="fas fa-clock"></i> Timer
+                    </button>
+                    <button class="btn-view" onclick="viewRecipe('${recipe.id}')">
+                        <i class="fas fa-expand"></i> Ver más
                     </button>
                 </div>
             </div>
@@ -319,6 +334,14 @@ function setupSmoothScroll() {
                 const targetSection = document.querySelector(targetId);
                 
                 if (targetSection) {
+                    // Ocultar todas las secciones primero
+                    document.querySelectorAll('.recipe-section').forEach(section => {
+                        section.style.display = 'none';
+                    });
+                    
+                    // Mostrar solo la sección seleccionada
+                    targetSection.style.display = 'block';
+                    
                     // Actualizar navegación activa
                     updateActiveNavigation(targetId);
                     
@@ -388,6 +411,253 @@ function setupScrollAnimations() {
     document.querySelectorAll('.hero h1, .hero p, .hero-buttons').forEach(el => {
         el.classList.add('fade-in');
     });
+}
+
+// Sistema de búsqueda
+function setupSearch() {
+    const searchInput = document.getElementById('searchInput');
+    const searchBtn = document.getElementById('searchBtn');
+    
+    searchBtn.addEventListener('click', performSearch);
+    searchInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            performSearch();
+        }
+    });
+}
+
+function performSearch() {
+    const query = document.getElementById('searchInput').value.trim();
+    
+    if (query === '') {
+        showNotification('🔍 Escribe algo para buscar', 'warning');
+        return;
+    }
+    
+    const results = searchRecipes(query);
+    
+    if (results.length > 0) {
+        // Mostrar resultados en modal
+        showSearchResults(results, query);
+        showNotification(`🔍 Encontradas ${results.length} recetas para "${query}"`, 'success');
+    } else {
+        showNotification(`❌ No se encontraron recetas para "${query}"`, 'danger');
+    }
+}
+
+function searchRecipes(query) {
+    const recipes = document.querySelectorAll('.recipe-card');
+    const results = [];
+    
+    recipes.forEach(recipe => {
+        const title = recipe.querySelector('h3').textContent.toLowerCase();
+        const description = recipe.querySelector('.recipe-desc').textContent.toLowerCase();
+        const ingredients = Array.from(recipe.querySelectorAll('.ingredients li'))
+            .map(li => li.textContent.toLowerCase())
+            .join(' ');
+        
+        if (title.includes(query.toLowerCase()) || 
+            description.includes(query.toLowerCase()) || 
+            ingredients.includes(query.toLowerCase())) {
+            results.push({
+                element: recipe,
+                title: recipe.querySelector('h3').textContent,
+                id: recipe.dataset.id,
+                section: recipe.closest('.recipe-section').id
+            });
+        }
+    });
+    
+    return results;
+}
+
+function showSearchResults(results, query) {
+    const modalContent = document.getElementById('modalRecipeContent');
+    
+    modalContent.innerHTML = `
+        <div class="search-results-header">
+            <h2>Resultados de búsqueda: "${query}"</h2>
+            <p>Se encontraron ${results.length} recetas</p>
+        </div>
+        <div class="search-results-list">
+            ${results.map(result => `
+                <div class="search-result-item" onclick="viewRecipe('${result.id}')">
+                    <h3>${result.title}</h3>
+                    <p>${getRegionName(result.section)}</p>
+                    <i class="fas fa-chevron-right"></i>
+                </div>
+            `).join('')}
+        </div>
+    `;
+    
+    // Mostrar modal
+    document.getElementById('recipeModal').style.display = 'block';
+}
+
+// Búsqueda por voz
+function setupVoiceSearch() {
+    const voiceBtn = document.getElementById('voiceSearchBtn');
+    
+    // Verificar si el navegador soporta reconocimiento de voz
+    if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+        recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+        recognition.continuous = false;
+        recognition.interimResults = false;
+        recognition.lang = 'es-ES';
+        
+        recognition.onstart = function() {
+            isListening = true;
+            voiceBtn.classList.add('voice-listening');
+            showNotification('🎤 Escuchando... Habla ahora', 'info');
+        };
+        
+        recognition.onresult = function(event) {
+            const transcript = event.results[0][0].transcript;
+            document.getElementById('searchInput').value = transcript;
+            voiceBtn.classList.remove('voice-listening');
+            isListening = false;
+            
+            // Realizar búsqueda automáticamente
+            setTimeout(() => {
+                performSearch();
+            }, 500);
+        };
+        
+        recognition.onerror = function(event) {
+            console.error('Error en reconocimiento de voz:', event.error);
+            voiceBtn.classList.remove('voice-listening');
+            isListening = false;
+            showNotification('❌ Error en reconocimiento de voz', 'danger');
+        };
+        
+        recognition.onend = function() {
+            voiceBtn.classList.remove('voice-listening');
+            isListening = false;
+        };
+        
+        voiceBtn.addEventListener('click', function() {
+            if (isListening) {
+                recognition.stop();
+            } else {
+                recognition.start();
+            }
+        });
+    } else {
+        // El navegador no soporta reconocimiento de voz
+        voiceBtn.style.display = 'none';
+        console.log('El reconocimiento de voz no es compatible con este navegador');
+    }
+}
+
+// Modal para mostrar recetas
+function setupModal() {
+    const modal = document.getElementById('recipeModal');
+    const closeBtn = document.querySelector('.close-modal');
+    
+    closeBtn.addEventListener('click', function() {
+        modal.style.display = 'none';
+    });
+    
+    window.addEventListener('click', function(event) {
+        if (event.target === modal) {
+            modal.style.display = 'none';
+        }
+    });
+}
+
+function viewRecipe(recipeId) {
+    const recipeCard = document.querySelector(`.recipe-card[data-id="${recipeId}"]`);
+    
+    if (!recipeCard) {
+        showNotification('❌ Receta no encontrada', 'danger');
+        return;
+    }
+    
+    const modalContent = document.getElementById('modalRecipeContent');
+    const title = recipeCard.querySelector('h3').textContent;
+    const image = recipeCard.querySelector('img').src;
+    const time = recipeCard.dataset.time;
+    const difficulty = recipeCard.dataset.difficulty;
+    const description = recipeCard.querySelector('.recipe-desc').textContent;
+    const ingredients = Array.from(recipeCard.querySelectorAll('.ingredients li')).map(li => li.textContent);
+    const preparation = Array.from(recipeCard.querySelectorAll('.preparation li')).map(li => li.textContent);
+    
+    modalContent.innerHTML = `
+        <div class="modal-recipe">
+            <div class="card-header">
+                <img src="${image}" alt="${title}">
+                <div class="card-overlay">
+                    <span class="card-badge ${difficulty}">${getDifficultyText(difficulty)}</span>
+                </div>
+            </div>
+            <div class="recipe-content">
+                <h2>${title}</h2>
+                <div class="recipe-meta">
+                    <span><i class="fas fa-clock"></i> ${time} min</span>
+                    <span><i class="fas fa-users"></i> 4-6 personas</span>
+                    <span><i class="fas fa-fire"></i> ${getCalories(time)} cal</span>
+                </div>
+                <p class="recipe-desc">${description}</p>
+                
+                <div class="ingredients">
+                    <h3><i class="fas fa-list"></i> Ingredientes</h3>
+                    <ul>
+                        ${ingredients.map(ingredient => `<li>${ingredient}</li>`).join('')}
+                    </ul>
+                </div>
+
+                <div class="preparation">
+                    <h3><i class="fas fa-blender"></i> Preparación</h3>
+                    <ol>
+                        ${preparation.map(step => `<li>${step}</li>`).join('')}
+                    </ol>
+                </div>
+
+                <div class="card-actions">
+                    <button class="btn-favorite" onclick="toggleFavoriteInModal('${recipeId}')">
+                        <i class="far fa-heart"></i> Favorito
+                    </button>
+                    <button class="btn-timer" onclick="startTimer(${time}, this)">
+                        <i class="fas fa-clock"></i> Timer
+                    </button>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    // Marcar como favorito si ya lo es
+    const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+    const isFavorite = favorites.some(fav => fav.id === recipeId);
+    
+    if (isFavorite) {
+        const favoriteBtn = modalContent.querySelector('.btn-favorite');
+        favoriteBtn.classList.add('active');
+        favoriteBtn.innerHTML = '<i class="fas fa-heart"></i> En Favoritos';
+    }
+    
+    // Mostrar modal
+    document.getElementById('recipeModal').style.display = 'block';
+}
+
+function toggleFavoriteInModal(recipeId) {
+    const recipeCard = document.querySelector(`.recipe-card[data-id="${recipeId}"]`);
+    
+    if (recipeCard) {
+        const favoriteBtn = recipeCard.querySelector('.btn-favorite');
+        toggleFavorite(favoriteBtn);
+        
+        // Actualizar botón en el modal
+        const modalFavoriteBtn = document.querySelector('#modalRecipeContent .btn-favorite');
+        const isFavorite = favoriteBtn.classList.contains('active');
+        
+        if (isFavorite) {
+            modalFavoriteBtn.classList.add('active');
+            modalFavoriteBtn.innerHTML = '<i class="fas fa-heart"></i> En Favoritos';
+        } else {
+            modalFavoriteBtn.classList.remove('active');
+            modalFavoriteBtn.innerHTML = '<i class="far fa-heart"></i> Favorito';
+        }
+    }
 }
 
 // Notificaciones
@@ -466,34 +736,58 @@ style.textContent = `
             transform: translateY(0);
         }
     }
+    
+    /* Estilos para resultados de búsqueda */
+    .search-results-header {
+        text-align: center;
+        margin-bottom: 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 2px solid var(--primary-light);
+    }
+    
+    .search-results-list {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .search-result-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem;
+        background: var(--light);
+        border-radius: var(--border-radius);
+        cursor: pointer;
+        transition: var(--transition);
+        border: 2px solid transparent;
+    }
+    
+    .search-result-item:hover {
+        border-color: var(--primary);
+        transform: translateY(-3px);
+        box-shadow: var(--shadow-hover);
+    }
+    
+    .search-result-item h3 {
+        margin-bottom: 0.5rem;
+        color: var(--primary);
+    }
+    
+    .search-result-item p {
+        margin-bottom: 0;
+        color: var(--gray);
+        font-size: 0.9rem;
+    }
+    
+    .search-result-item i {
+        color: var(--primary);
+        font-size: 1.2rem;
+    }
 `;
 document.head.appendChild(style);
 
 // Utilidades adicionales
-function searchRecipes(query) {
-    const recipes = document.querySelectorAll('.recipe-card');
-    let found = false;
-    
-    recipes.forEach(recipe => {
-        const title = recipe.querySelector('h3').textContent.toLowerCase();
-        const description = recipe.querySelector('.recipe-desc').textContent.toLowerCase();
-        const ingredients = Array.from(recipe.querySelectorAll('.ingredients li'))
-            .map(li => li.textContent.toLowerCase())
-            .join(' ');
-        
-        if (title.includes(query.toLowerCase()) || 
-            description.includes(query.toLowerCase()) || 
-            ingredients.includes(query.toLowerCase())) {
-            recipe.style.display = 'flex';
-            found = true;
-        } else {
-            recipe.style.display = 'none';
-        }
-    });
-    
-    return found;
-}
-
 function filterByRegion(region) {
     const sections = document.querySelectorAll('.recipe-section');
     
@@ -524,6 +818,7 @@ window.startTimer = startTimer;
 window.pauseTimer = pauseTimer;
 window.resetTimer = resetTimer;
 window.hideTimer = hideTimer;
+window.viewRecipe = viewRecipe;
 window.searchRecipes = searchRecipes;
 window.filterByRegion = filterByRegion;
 window.filterByDifficulty = filterByDifficulty;
