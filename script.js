@@ -1,4 +1,4 @@
-// Variables globales simples
+// Variables globales
 let currentTimer = null;
 let timerInterval = null;
 let timeLeft = 0;
@@ -6,7 +6,7 @@ let isTimerRunning = false;
 
 // Inicializar cuando cargue la página
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('🍳 Recetas Pro cargado! :V');
+    console.log('🍲 Sabores Ancestrales Perú cargado! 🌄');
     
     // Cargar modo oscuro si estaba guardado
     loadDarkMode();
@@ -20,63 +20,13 @@ document.addEventListener('DOMContentLoaded', function() {
     // Configurar navegación suave
     setupSmoothScroll();
     
-    // Configurar música de fondo
-    setupBackgroundMusic();
+    // Mostrar mensaje de bienvenida
+    setTimeout(() => {
+        showNotification('🌄 Bienvenido a Sabores Ancestrales Perú - Rescatando nuestra herencia culinaria', 'success');
+    }, 1000);
 });
 
-// Sistema de música de fondo
-function setupBackgroundMusic() {
-    const music = document.getElementById('backgroundMusic');
-    const musicToggle = document.getElementById('musicToggle');
-    
-    // Cargar estado de la música desde localStorage
-    const musicEnabled = localStorage.getItem('musicEnabled') === 'true';
-    
-    if (musicEnabled) {
-        music.volume = 0.4;
-        music.play().then(() => {
-            musicToggle.classList.add('playing');
-            musicToggle.innerHTML = '<i class="fas fa-volume-up"></i>';
-        }).catch(error => {
-            console.log('Auto-reproducción bloqueada:', error);
-        });
-    }
-    
-    // Configurar el botón de música
-    musicToggle.addEventListener('click', function() {
-        if (music.paused) {
-            music.volume = 0.4;
-            music.play();
-            this.classList.add('playing');
-            this.innerHTML = '<i class="fas fa-volume-up"></i>';
-            localStorage.setItem('musicEnabled', 'true');
-            showNotification('🎵 Phonk activado! :V');
-        } else {
-            music.pause();
-            this.classList.remove('playing');
-            this.innerHTML = '<i class="fas fa-volume-mute"></i>';
-            localStorage.setItem('musicEnabled', 'false');
-            showNotification('🔇 Música pausada');
-        }
-    });
-    
-    // Intentar reproducir cuando el usuario interactúe con la página
-    document.addEventListener('click', function initMusic() {
-        if (music.paused && localStorage.getItem('musicEnabled') !== 'false') {
-            music.volume = 0.4;
-            music.play().then(() => {
-                musicToggle.classList.add('playing');
-                musicToggle.innerHTML = '<i class="fas fa-volume-up"></i>';
-                showNotification('🎵 ¡Phonk activado! Cocina con ritmo :V');
-            }).catch(error => {
-                console.log('No se pudo reproducir la música:', error);
-            });
-        }
-        document.removeEventListener('click', initMusic);
-    });
-}
-
-// Modo oscuro simple
+// Modo oscuro
 function toggleDarkMode() {
     const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
     
@@ -89,7 +39,7 @@ function toggleDarkMode() {
         document.documentElement.setAttribute('data-theme', 'dark');
         localStorage.setItem('darkMode', 'true');
         document.querySelector('#darkModeToggle i').className = 'fas fa-sun';
-        showNotification('🌙 Modo oscuro activado');
+        showNotification('🌙 Modo oscuro activado - Como una noche andina');
     }
 }
 
@@ -101,26 +51,41 @@ function loadDarkMode() {
     }
 }
 
-// Sistema de favoritos simple
+// Sistema de favoritos
 function toggleFavorite(button) {
     const card = button.closest('.recipe-card');
     const recipeTitle = card.querySelector('h3').textContent;
+    const recipeSection = card.closest('.recipe-section').id;
     
     // Obtener favoritos actuales
     let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
     
-    if (button.classList.contains('active')) {
+    // Buscar si ya existe
+    const existingIndex = favorites.findIndex(fav => fav.title === recipeTitle);
+    
+    if (existingIndex !== -1) {
         // Quitar de favoritos
-        favorites = favorites.filter(title => title !== recipeTitle);
+        favorites.splice(existingIndex, 1);
         button.classList.remove('active');
         button.innerHTML = '<i class="far fa-heart"></i> Favorito';
+        card.classList.remove('favorite-recipe');
         showNotification(`💔 "${recipeTitle}" removido de favoritos`);
     } else {
         // Agregar a favoritos
-        favorites.push(recipeTitle);
+        const recipeData = {
+            title: recipeTitle,
+            section: recipeSection,
+            time: card.dataset.time,
+            difficulty: card.dataset.difficulty,
+            image: card.querySelector('img').src,
+            description: card.querySelector('.recipe-desc').textContent
+        };
+        
+        favorites.push(recipeData);
         button.classList.add('active');
         button.innerHTML = '<i class="fas fa-heart"></i> En Favoritos';
-        showNotification(`❤️ "${recipeTitle}" agregado a favoritos`);
+        card.classList.add('favorite-recipe');
+        showNotification(`❤️ "${recipeTitle}" agregado a tus recetas ancestrales`);
     }
     
     // Guardar en localStorage
@@ -133,14 +98,16 @@ function toggleFavorite(button) {
 function loadFavorites() {
     const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
     
-    // Marcar botones de favoritos
+    // Marcar botones de favoritos y tarjetas
     document.querySelectorAll('.recipe-card').forEach(card => {
         const title = card.querySelector('h3').textContent;
         const button = card.querySelector('.btn-favorite');
+        const isFavorite = favorites.some(fav => fav.title === title);
         
-        if (favorites.includes(title)) {
+        if (isFavorite) {
             button.classList.add('active');
             button.innerHTML = '<i class="fas fa-heart"></i> En Favoritos';
+            card.classList.add('favorite-recipe');
         }
     });
     
@@ -155,27 +122,59 @@ function updateFavoritesSection() {
         container.innerHTML = `
             <div class="empty-favorites">
                 <i class="fas fa-heart-broken"></i>
-                <h3>Aún no tienes favoritos</h3>
-                <p>¡Haz clic en el corazón de las recetas que te gusten!</p>
+                <h3>Aún no tienes recetas favoritas</h3>
+                <p>¡Haz clic en el corazón de las recetas que te gusten para rescatarlas!</p>
             </div>
         `;
         return;
     }
     
-    // Mostrar recetas favoritas (simplificado por ahora)
-    container.innerHTML = `
-        <div class="empty-favorites">
-            <i class="fas fa-heart"></i>
-            <h3>Tienes ${favorites.length} favoritos</h3>
-            <p>¡Sigue agregando más recetas que te gusten!</p>
-            <p style="margin-top: 1rem; font-size: 0.9rem; color: var(--gray);">
-                ${favorites.join(', ')}
-            </p>
+    // Mostrar recetas favoritas
+    container.innerHTML = favorites.map(recipe => `
+        <div class="recipe-card favorite-recipe" data-time="${recipe.time}" data-difficulty="${recipe.difficulty}">
+            <div class="card-header">
+                <img src="${recipe.image}" alt="${recipe.title}">
+                <div class="card-badge ${recipe.difficulty}">${getDifficultyText(recipe.difficulty)}</div>
+            </div>
+            <div class="recipe-content">
+                <h3>${recipe.title}</h3>
+                <div class="recipe-meta">
+                    <span><i class="fas fa-clock"></i> ${recipe.time}min</span>
+                    <span><i class="fas fa-map-marker-alt"></i> ${getRegionName(recipe.section)}</span>
+                </div>
+                <p class="recipe-desc">${recipe.description}</p>
+                <div class="card-actions">
+                    <button class="btn-favorite active" onclick="toggleFavorite(this)">
+                        <i class="fas fa-heart"></i> En Favoritos
+                    </button>
+                    <button class="btn-timer" onclick="startTimer(${recipe.time}, this)">
+                        <i class="fas fa-clock"></i> Timer
+                    </button>
+                </div>
+            </div>
         </div>
-    `;
+    `).join('');
 }
 
-// Timer simple y funcional
+function getDifficultyText(difficulty) {
+    const texts = {
+        'facil': 'Fácil',
+        'medio': 'Medio',
+        'dificil': 'Tradicional'
+    };
+    return texts[difficulty] || difficulty;
+}
+
+function getRegionName(section) {
+    const regions = {
+        'costa': 'Costa',
+        'sierra': 'Sierra',
+        'selva': 'Selva'
+    };
+    return regions[section] || section;
+}
+
+// Timer de cocina
 function startTimer(minutes, button) {
     // Detener timer anterior si existe
     if (timerInterval) {
@@ -199,12 +198,16 @@ function startTimer(minutes, button) {
             updateTimerDisplay();
         } else if (timeLeft === 0) {
             clearInterval(timerInterval);
-            showNotification('🎉 ¡Tiempo completado! La comida debe estar lista :V', 'success');
-            timer.classList.add('timer-hidden');
+            showNotification('🎉 ¡Tiempo completado! Tu platillo ancestral está listo 🌄', 'success');
+            // Sonido opcional (solo si el usuario ha interactuado)
+            try {
+                const audio = new Audio('data:audio/wav;base64,UklGRigAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQQAAAAAAA==');
+                audio.play();
+            } catch (e) {}
         }
     }, 1000);
     
-    showNotification(`⏱️ Timer iniciado: ${minutes} minutos`);
+    showNotification(`⏱️ Timer ancestral iniciado: ${minutes} minutos`);
 }
 
 function pauseTimer() {
@@ -218,7 +221,7 @@ function resetTimer() {
     timeLeft = 0;
     isTimerRunning = false;
     document.getElementById('timer').classList.add('timer-hidden');
-    showNotification('🛑 Timer detenido');
+    showNotification('🛑 Timer ancestral detenido');
 }
 
 function hideTimer() {
@@ -239,7 +242,7 @@ function updateTimerDisplay() {
     }
 }
 
-// Navegación suave simple
+// Navegación suave
 function setupSmoothScroll() {
     document.querySelectorAll('nav a').forEach(link => {
         link.addEventListener('click', function(e) {
@@ -257,7 +260,7 @@ function setupSmoothScroll() {
     });
 }
 
-// Notificaciones simples
+// Notificaciones
 function showNotification(message, type = 'info') {
     // Crear elemento de notificación
     const notification = document.createElement('div');
@@ -274,11 +277,12 @@ function showNotification(message, type = 'info') {
         z-index: 1000;
         animation: slideInRight 0.3s ease;
         max-width: 300px;
+        font-weight: 500;
     `;
     
     document.body.appendChild(notification);
     
-    // Remover después de 3 segundos
+    // Remover después de 4 segundos
     setTimeout(() => {
         notification.style.animation = 'slideOutRight 0.3s ease';
         setTimeout(() => {
@@ -286,7 +290,7 @@ function showNotification(message, type = 'info') {
                 notification.parentElement.removeChild(notification);
             }
         }, 300);
-    }, 3000);
+    }, 4000);
 }
 
 // Añadir los keyframes para las animaciones
@@ -313,7 +317,30 @@ style.textContent = `
             opacity: 0;
         }
     }
+    
+    .favorite-recipe {
+        position: relative;
+        border: 2px solid var(--primary) !important;
+        background: linear-gradient(135deg, var(--light), #fff8e1);
+    }
+    
+    .favorite-recipe::before {
+        content: '❤️';
+        position: absolute;
+        top: -10px;
+        right: -10px;
+        background: var(--primary);
+        color: white;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.8rem;
+        z-index: 10;
+    }
 `;
 document.head.appendChild(style);
 
-console.log('✅ ¡Todo cargado correctamente! ¡A cocinar! :V');
+console.log('✅ ¡Sabores Ancestrales Perú cargado correctamente! ¡A cocinar como nuestros abuelos! 🌄');
