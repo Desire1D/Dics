@@ -5,16 +5,18 @@
 }
 
 :root {
-    --primary: #ff6b6b;
-    --primary-dark: #ee5a24;
-    --secondary: #4ecdc4;
-    --accent: #ffd93d;
-    --dark: #2d3436;
-    --light: #f8f9fa;
-    --gray: #636e72;
-    --success: #00b894;
-    --warning: #fdcb6e;
-    --danger: #e17055;
+    --primary: #e74c3c;
+    --primary-dark: #c0392b;
+    --secondary: #27ae60;
+    --accent: #f39c12;
+    --andino: #8e44ad;
+    --amazonico: #16a085;
+    --dark: #2c3e50;
+    --light: #ecf0f1;
+    --gray: #7f8c8d;
+    --success: #27ae60;
+    --warning: #f39c12;
+    --danger: #e74c3c;
     
     --shadow: 0 8px 25px rgba(0,0,0,0.1);
     --shadow-hover: 0 15px 40px rgba(0,0,0,0.15);
@@ -23,9 +25,9 @@
 }
 
 [data-theme="dark"] {
-    --light: #2d3436;
-    --dark: #f8f9fa;
-    --gray: #b2bec3;
+    --light: #2c3e50;
+    --dark: #ecf0f1;
+    --gray: #bdc3c7;
     --shadow: 0 8px 25px rgba(0,0,0,0.3);
 }
 
@@ -66,15 +68,6 @@ header {
     opacity: 0.9;
 }
 
-.emoji {
-    animation: bounce 2s infinite;
-}
-
-@keyframes bounce {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-5px); }
-}
-
 .mode-btn {
     background: rgba(255,255,255,0.2);
     border: none;
@@ -89,41 +82,6 @@ header {
 .mode-btn:hover {
     background: rgba(255,255,255,0.3);
     transform: scale(1.1);
-}
-
-/* Botón de música */
-.music-btn {
-    position: fixed;
-    bottom: 2rem;
-    left: 2rem;
-    background: var(--primary);
-    border: none;
-    color: white;
-    padding: 1rem;
-    border-radius: 50%;
-    cursor: pointer;
-    transition: var(--transition);
-    font-size: 1.2rem;
-    box-shadow: var(--shadow);
-    z-index: 1000;
-}
-
-.music-btn:hover {
-    background: var(--primary-dark);
-    transform: scale(1.1);
-}
-
-.music-btn.playing {
-    background: var(--success);
-}
-
-.music-btn.playing i {
-    animation: pulse 1.5s infinite;
-}
-
-@keyframes pulse {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.1); }
 }
 
 /* Navegación */
@@ -169,13 +127,25 @@ nav a:hover {
 
 .recipe-section h2 {
     font-size: 2rem;
-    margin-bottom: 2rem;
+    margin-bottom: 1rem;
     text-align: center;
     color: var(--dark);
     border-bottom: 3px solid var(--primary);
     padding-bottom: 0.5rem;
     display: inline-block;
 }
+
+.section-desc {
+    text-align: center;
+    color: var(--gray);
+    margin-bottom: 2rem;
+    font-style: italic;
+}
+
+/* Colores por región */
+#costa h2 { border-color: #3498db; }
+#sierra h2 { border-color: var(--andino); }
+#selva h2 { border-color: var(--amazonico); }
 
 /* Grid de recetas */
 .recipes-grid {
@@ -192,12 +162,17 @@ nav a:hover {
     box-shadow: var(--shadow);
     overflow: hidden;
     transition: var(--transition);
+    border: 2px solid transparent;
 }
 
 .recipe-card:hover {
     transform: translateY(-5px);
     box-shadow: var(--shadow-hover);
 }
+
+#costa .recipe-card:hover { border-color: #3498db; }
+#sierra .recipe-card:hover { border-color: var(--andino); }
+#selva .recipe-card:hover { border-color: var(--amazonico); }
 
 .card-header {
     position: relative;
@@ -236,8 +211,8 @@ nav a:hover {
     color: var(--dark);
 }
 
-.card-badge.dificil {
-    background: var(--danger);
+.card-badge.dificil, .card-badge.tradicional {
+    background: var(--andino);
 }
 
 .recipe-content {
@@ -344,6 +319,7 @@ nav a:hover {
     text-align: center;
     padding: 3rem;
     color: var(--gray);
+    grid-column: 1 / -1;
 }
 
 .empty-favorites i {
@@ -450,23 +426,9 @@ footer {
         right: 1rem;
         left: 1rem;
     }
-    
-    .music-btn {
-        bottom: 1rem;
-        left: 1rem;
-        padding: 0.8rem;
-    }
 }
 
-/* Utilidades */
-.hidden {
-    display: none;
-}
-
-.fade-in {
-    animation: fadeIn 0.6s ease;
-}
-
+/* Animaciones */
 @keyframes fadeIn {
     from {
         opacity: 0;
@@ -476,4 +438,14 @@ footer {
         opacity: 1;
         transform: translateY(0);
     }
+}
+
+.fade-in {
+    animation: fadeIn 0.6s ease;
+}
+
+/* Estilos para las recetas favoritas */
+.favorite-recipe {
+    border: 2px solid var(--primary) !important;
+    background: linear-gradient(135deg, var(--light), #fff8e1);
 }
