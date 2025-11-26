@@ -19,7 +19,62 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Configurar navegación suave
     setupSmoothScroll();
+    
+    // Configurar música de fondo
+    setupBackgroundMusic();
 });
+
+// Sistema de música de fondo
+function setupBackgroundMusic() {
+    const music = document.getElementById('backgroundMusic');
+    const musicToggle = document.getElementById('musicToggle');
+    
+    // Cargar estado de la música desde localStorage
+    const musicEnabled = localStorage.getItem('musicEnabled') === 'true';
+    
+    if (musicEnabled) {
+        music.volume = 0.4;
+        music.play().then(() => {
+            musicToggle.classList.add('playing');
+            musicToggle.innerHTML = '<i class="fas fa-volume-up"></i>';
+        }).catch(error => {
+            console.log('Auto-reproducción bloqueada:', error);
+        });
+    }
+    
+    // Configurar el botón de música
+    musicToggle.addEventListener('click', function() {
+        if (music.paused) {
+            music.volume = 0.4;
+            music.play();
+            this.classList.add('playing');
+            this.innerHTML = '<i class="fas fa-volume-up"></i>';
+            localStorage.setItem('musicEnabled', 'true');
+            showNotification('🎵 Phonk activado! :V');
+        } else {
+            music.pause();
+            this.classList.remove('playing');
+            this.innerHTML = '<i class="fas fa-volume-mute"></i>';
+            localStorage.setItem('musicEnabled', 'false');
+            showNotification('🔇 Música pausada');
+        }
+    });
+    
+    // Intentar reproducir cuando el usuario interactúe con la página
+    document.addEventListener('click', function initMusic() {
+        if (music.paused && localStorage.getItem('musicEnabled') !== 'false') {
+            music.volume = 0.4;
+            music.play().then(() => {
+                musicToggle.classList.add('playing');
+                musicToggle.innerHTML = '<i class="fas fa-volume-up"></i>';
+                showNotification('🎵 ¡Phonk activado! Cocina con ritmo :V');
+            }).catch(error => {
+                console.log('No se pudo reproducir la música:', error);
+            });
+        }
+        document.removeEventListener('click', initMusic);
+    });
+}
 
 // Modo oscuro simple
 function toggleDarkMode() {
