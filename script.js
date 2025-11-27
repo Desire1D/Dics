@@ -15,7 +15,7 @@ const regionMusic = {
         {
             title: "Marinera Norteña",
             artist: "Música Criolla Peruana",
-            src: "https://www.soundjay.com/misc/sounds/bell-ringing-05.wav", // Placeholder
+            src: "Phonk.mp3", // Placeholder
             region: "Costa"
         },
         {
