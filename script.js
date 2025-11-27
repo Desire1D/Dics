@@ -239,17 +239,15 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-// Sistema de Filtros
+// Sistema de Filtros Simplificado
 function setupFilters() {
     const filtersToggle = document.getElementById('filtersToggle');
     const showFilters = document.getElementById('showFilters');
     const closeFilters = document.querySelector('.close-filters');
-    const applyFilters = document.getElementById('applyFilters');
     const clearFilters = document.getElementById('clearFilters');
     const timeFilter = document.getElementById('timeFilter');
     const ingredientsInput = document.getElementById('ingredientsInput');
     const voiceIngredientsBtn = document.getElementById('voiceIngredientsBtn');
-    const difficultyBtns = document.querySelectorAll('.difficulty-btn');
     const timeOptions = document.querySelectorAll('.time-options button');
     
     // Toggle panel de filtros
@@ -259,14 +257,14 @@ function setupFilters() {
     
     closeFilters?.addEventListener('click', toggleFiltersPanel);
     
-    // Aplicar filtros
-    applyFilters?.addEventListener('click', applyAllFilters);
-    
     // Limpiar filtros
     clearFilters?.addEventListener('click', clearAllFilters);
     
-    // Actualizar display del tiempo
-    timeFilter?.addEventListener('input', updateTimeDisplay);
+    // Actualizar display del tiempo y aplicar filtros automáticamente
+    timeFilter?.addEventListener('input', function() {
+        updateTimeDisplay();
+        applyAllFilters();
+    });
     
     // Botones de tiempo rápido
     timeOptions?.forEach(btn => {
@@ -274,23 +272,17 @@ function setupFilters() {
             const time = parseInt(this.dataset.time);
             document.getElementById('timeFilter').value = time;
             updateTimeDisplay();
+            applyAllFilters();
         });
     });
     
-    // Ingredientes con Enter
+    // Ingredientes con Enter - aplicar automáticamente
     ingredientsInput?.addEventListener('keypress', function(e) {
         if (e.key === 'Enter') {
             addIngredientTag(this.value.trim());
             this.value = '';
+            applyAllFilters();
         }
-    });
-    
-    // Dificultad
-    difficultyBtns?.forEach(btn => {
-        btn.addEventListener('click', function() {
-            difficultyBtns.forEach(b => b.classList.remove('active'));
-            this.classList.add('active');
-        });
     });
     
     // Voz para ingredientes
@@ -325,9 +317,14 @@ function addIngredientTag(ingredient) {
     tag.className = 'ingredient-tag';
     tag.innerHTML = `
         ${ingredient}
-        <button onclick="this.parentElement.remove()">&times;</button>
+        <button onclick="removeIngredientTag(this)">&times;</button>
     `;
     tagsContainer.appendChild(tag);
+}
+
+function removeIngredientTag(button) {
+    button.parentElement.remove();
+    applyAllFilters();
 }
 
 function setupVoiceIngredients(button) {
@@ -354,6 +351,7 @@ function setupVoiceIngredients(button) {
             
             button.classList.remove('voice-listening');
             showNotification(`✅ Ingredientes agregados: ${ingredients.join(', ')}`, 'success');
+            applyAllFilters();
         };
         
         recognition.onerror = function(event) {
@@ -372,7 +370,6 @@ function setupVoiceIngredients(button) {
 
 function applyAllFilters() {
     const maxTime = parseInt(document.getElementById('timeFilter').value);
-    const difficulty = document.querySelector('.difficulty-btn.active').dataset.difficulty;
     const ingredientTags = Array.from(document.querySelectorAll('.ingredient-tag'))
         .map(tag => tag.textContent.replace('×', '').trim().toLowerCase());
     
@@ -382,15 +379,13 @@ function applyAllFilters() {
     
     recipes.forEach(recipe => {
         const recipeTime = parseInt(recipe.dataset.time);
-        const recipeDifficulty = recipe.dataset.difficulty;
         const recipeIngredients = recipe.dataset.ingredients?.split(',') || [];
         
         const timeMatch = recipeTime <= maxTime;
-        const difficultyMatch = difficulty === 'all' || recipeDifficulty === difficulty;
         const ingredientsMatch = ingredientTags.length === 0 || 
             ingredientTags.every(tag => recipeIngredients.some(ing => ing.includes(tag)));
         
-        if (timeMatch && difficultyMatch && ingredientsMatch) {
+        if (timeMatch && ingredientsMatch) {
             recipe.style.display = 'flex';
             visibleCount++;
         } else {
@@ -398,22 +393,16 @@ function applyAllFilters() {
         }
     });
     
-    toggleFiltersPanel();
-    showNotification(`🔍 Mostrando ${visibleCount} recetas con los filtros aplicados`, 'success');
+    // Mostrar notificación solo si hay filtros activos
+    if (maxTime < 240 || ingredientTags.length > 0) {
+        showNotification(`🔍 Mostrando ${visibleCount} recetas con los filtros aplicados`, 'success');
+    }
 }
 
 function clearAllFilters() {
     // Restablecer tiempo
     document.getElementById('timeFilter').value = 240;
     updateTimeDisplay();
-    
-    // Restablecer dificultad
-    document.querySelectorAll('.difficulty-btn').forEach(btn => {
-        btn.classList.remove('active');
-        if (btn.dataset.difficulty === 'all') {
-            btn.classList.add('active');
-        }
-    });
     
     // Limpiar ingredientes
     document.getElementById('ingredientsTags').innerHTML = '';
@@ -1184,18 +1173,6 @@ function filterByRegion(region) {
     });
 }
 
-function filterByDifficulty(difficulty) {
-    const recipes = document.querySelectorAll('.recipe-card');
-    
-    recipes.forEach(recipe => {
-        if (difficulty === 'all' || recipe.dataset.difficulty === difficulty) {
-            recipe.style.display = 'flex';
-        } else {
-            recipe.style.display = 'none';
-        }
-    });
-}
-
 // Exportar funciones para uso global
 window.toggleFavorite = toggleFavorite;
 window.startTimer = startTimer;
@@ -1205,8 +1182,8 @@ window.hideTimer = hideTimer;
 window.viewRecipe = viewRecipe;
 window.searchRecipes = searchRecipes;
 window.filterByRegion = filterByRegion;
-window.filterByDifficulty = filterByDifficulty;
 window.addIngredientTag = addIngredientTag;
+window.removeIngredientTag = removeIngredientTag;
 window.toggleFiltersPanel = toggleFiltersPanel;
 window.applyAllFilters = applyAllFilters;
 window.clearAllFilters = clearAllFilters;
