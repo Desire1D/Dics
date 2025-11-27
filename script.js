@@ -29,7 +29,7 @@ const regionMusic = {
         {
             title: "Huayno Andino",
             artist: "Música de los Andes",
-            src: "https://www.soundjay.com/misc/sounds/bell-ringing-05.wav",
+            src: "Sierra.mp3",
             region: "Sierra"
         },
         {
