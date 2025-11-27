@@ -15,7 +15,7 @@ const regionMusic = {
         {
             title: "Musica endemica de la costa",
             artist: "Deyvis",
-            src: "phonk.mp3", // Placeholder
+            src: "phonk.mp3",
             region: "Costa"
         },
         {
@@ -58,6 +58,39 @@ const regionMusic = {
 let currentTrackIndex = 0;
 let currentPlaylist = [];
 
+// Función para mejorar navegación en móviles
+function setupMobileNavigation() {
+    const navLinks = document.querySelector('.nav-links');
+    const navContainer = document.querySelector('.nav-container');
+    
+    // Asegurar que la navegación sea responsive
+    function handleResize() {
+        if (window.innerWidth <= 768) {
+            // En móviles, asegurar que los enlaces sean visibles
+            navLinks.style.display = 'flex';
+            navLinks.style.overflowX = 'auto';
+            navLinks.style.flexWrap = 'nowrap';
+        } else {
+            // En desktop, comportamiento normal
+            navLinks.style.overflowX = 'visible';
+            navLinks.style.flexWrap = 'wrap';
+        }
+    }
+    
+    // Ejecutar al cargar y al redimensionar
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    
+    // Mejorar experiencia táctil
+    navLinks.addEventListener('touchstart', function() {
+        this.style.cursor = 'grabbing';
+    });
+    
+    navLinks.addEventListener('touchend', function() {
+        this.style.cursor = 'grab';
+    });
+}
+
 // Inicializar cuando cargue la página
 document.addEventListener('DOMContentLoaded', function() {
     console.log('🍲 Sabores Ancestrales Perú cargado! 🌄');
@@ -67,6 +100,9 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Cargar favoritos
     loadFavorites();
+    
+    // Configurar navegación móvil
+    setupMobileNavigation();
     
     // Configurar el botón de modo oscuro
     document.getElementById('darkModeToggle').addEventListener('click', toggleDarkMode);
