@@ -5,6 +5,58 @@ let timeLeft = 0;
 let isTimerRunning = false;
 let recognition = null;
 let isListening = false;
+let currentAudio = null;
+let currentRegion = null;
+let isMusicPlaying = false;
+
+// Música por región
+const regionMusic = {
+    costa: [
+        {
+            title: "Marinera Norteña",
+            artist: "Música Criolla Peruana",
+            src: "https://www.soundjay.com/misc/sounds/bell-ringing-05.wav", // Placeholder
+            region: "Costa"
+        },
+        {
+            title: "Vals Peruano",
+            artist: "Tradicional Costeño",
+            src: "https://www.soundjay.com/misc/sounds/bell-ringing-05.wav",
+            region: "Costa"
+        }
+    ],
+    sierra: [
+        {
+            title: "Huayno Andino",
+            artist: "Música de los Andes",
+            src: "https://www.soundjay.com/misc/sounds/bell-ringing-05.wav",
+            region: "Sierra"
+        },
+        {
+            title: "Danza de Tijeras",
+            artist: "Música Huancavelicana",
+            src: "https://www.soundjay.com/misc/sounds/bell-ringing-05.wav",
+            region: "Sierra"
+        }
+    ],
+    selva: [
+        {
+            title: "Ritmo Amazónico",
+            artist: "Música de la Selva",
+            src: "https://www.soundjay.com/misc/sounds/bell-ringing-05.wav",
+            region: "Selva"
+        },
+        {
+            title: "Danza Shipiba",
+            artist: "Tradición Amazónica",
+            src: "https://www.soundjay.com/misc/sounds/bell-ringing-05.wav",
+            region: "Selva"
+        }
+    ]
+};
+
+let currentTrackIndex = 0;
+let currentPlaylist = [];
 
 // Inicializar cuando cargue la página
 document.addEventListener('DOMContentLoaded', function() {
@@ -18,6 +70,13 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Configurar el botón de modo oscuro
     document.getElementById('darkModeToggle').addEventListener('click', toggleDarkMode);
+    
+    // Configurar música
+    document.getElementById('musicToggle').addEventListener('click', toggleMusicPlayer);
+    document.getElementById('playPause').addEventListener('click', togglePlayPause);
+    document.getElementById('prevTrack').addEventListener('click', prevTrack);
+    document.getElementById('nextTrack').addEventListener('click', nextTrack);
+    document.getElementById('closePlayer').addEventListener('click', closeMusicPlayer);
     
     // Configurar navegación suave
     setupSmoothScroll();
@@ -37,8 +96,11 @@ document.addEventListener('DOMContentLoaded', function() {
     // Configurar modal
     setupModal();
     
-    // Configurar navegación táctil para móviles
-    setupTouchNavigation();
+    // Configurar filtros
+    setupFilters();
+    
+    // Configurar música por región
+    setupRegionMusic();
     
     // Mostrar mensaje de bienvenida
     setTimeout(() => {
@@ -46,31 +108,323 @@ document.addEventListener('DOMContentLoaded', function() {
     }, 1000);
 });
 
-// Configurar navegación táctil para móviles
-function setupTouchNavigation() {
-    const navLinks = document.querySelectorAll('.nav-link');
-    
-    navLinks.forEach(link => {
-        link.addEventListener('touchstart', function() {
-            this.style.transform = 'scale(0.95)';
+// Sistema de Música
+function setupRegionMusic() {
+    document.querySelectorAll('.region-music-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const region = this.dataset.region;
+            playRegionMusic(region);
         });
-        
-        link.addEventListener('touchend', function() {
-            this.style.transform = 'scale(1)';
+    });
+}
+
+function playRegionMusic(region) {
+    currentRegion = region;
+    currentPlaylist = regionMusic[region] || [];
+    currentTrackIndex = 0;
+    
+    if (currentPlaylist.length > 0) {
+        showMusicPlayer();
+        loadTrack(currentTrackIndex);
+        playCurrentTrack();
+        showNotification(`🎵 Reproduciendo música ${getRegionName(region)}`, 'success');
+    }
+}
+
+function showMusicPlayer() {
+    document.getElementById('musicPlayer').classList.remove('hidden');
+}
+
+function closeMusicPlayer() {
+    document.getElementById('musicPlayer').classList.add('hidden');
+    stopMusic();
+}
+
+function toggleMusicPlayer() {
+    const player = document.getElementById('musicPlayer');
+    if (player.classList.contains('hidden')) {
+        if (currentRegion) {
+            showMusicPlayer();
+        } else {
+            showNotification('🎵 Selecciona una región para escuchar su música', 'info');
+        }
+    } else {
+        closeMusicPlayer();
+    }
+}
+
+function loadTrack(index) {
+    if (currentPlaylist.length === 0) return;
+    
+    const track = currentPlaylist[index];
+    const audioPlayer = document.getElementById('audioPlayer');
+    
+    document.getElementById('currentTrack').textContent = track.title;
+    document.getElementById('currentRegion').textContent = `${track.artist} - ${track.region}`;
+    
+    audioPlayer.src = track.src;
+    audioPlayer.load();
+}
+
+function playCurrentTrack() {
+    const audioPlayer = document.getElementById('audioPlayer');
+    const playBtn = document.getElementById('playPause');
+    
+    audioPlayer.play().then(() => {
+        isMusicPlaying = true;
+        playBtn.innerHTML = '<i class="fas fa-pause"></i>';
+    }).catch(error => {
+        console.log('Error reproduciendo audio:', error);
+        showNotification('❌ Error reproduciendo música. Usa archivos locales para mejor experiencia.', 'warning');
+    });
+}
+
+function togglePlayPause() {
+    const audioPlayer = document.getElementById('audioPlayer');
+    const playBtn = document.getElementById('playPause');
+    
+    if (isMusicPlaying) {
+        audioPlayer.pause();
+        isMusicPlaying = false;
+        playBtn.innerHTML = '<i class="fas fa-play"></i>';
+    } else {
+        if (currentPlaylist.length === 0) {
+            showNotification('🎵 Selecciona una región primero', 'info');
+            return;
+        }
+        playCurrentTrack();
+    }
+}
+
+function prevTrack() {
+    if (currentPlaylist.length === 0) return;
+    
+    currentTrackIndex = (currentTrackIndex - 1 + currentPlaylist.length) % currentPlaylist.length;
+    loadTrack(currentTrackIndex);
+    if (isMusicPlaying) {
+        playCurrentTrack();
+    }
+}
+
+function nextTrack() {
+    if (currentPlaylist.length === 0) return;
+    
+    currentTrackIndex = (currentTrackIndex + 1) % currentPlaylist.length;
+    loadTrack(currentTrackIndex);
+    if (isMusicPlaying) {
+        playCurrentTrack();
+    }
+}
+
+function stopMusic() {
+    const audioPlayer = document.getElementById('audioPlayer');
+    const playBtn = document.getElementById('playPause');
+    
+    audioPlayer.pause();
+    audioPlayer.currentTime = 0;
+    isMusicPlaying = false;
+    playBtn.innerHTML = '<i class="fas fa-play"></i>';
+}
+
+// Configurar eventos del reproductor de audio
+document.addEventListener('DOMContentLoaded', function() {
+    const audioPlayer = document.getElementById('audioPlayer');
+    
+    audioPlayer.addEventListener('ended', function() {
+        nextTrack();
+    });
+    
+    audioPlayer.addEventListener('error', function() {
+        showNotification('❌ Error cargando la pista de audio', 'danger');
+    });
+});
+
+// Sistema de Filtros
+function setupFilters() {
+    const filtersToggle = document.getElementById('filtersToggle');
+    const showFilters = document.getElementById('showFilters');
+    const closeFilters = document.querySelector('.close-filters');
+    const applyFilters = document.getElementById('applyFilters');
+    const clearFilters = document.getElementById('clearFilters');
+    const timeFilter = document.getElementById('timeFilter');
+    const ingredientsInput = document.getElementById('ingredientsInput');
+    const voiceIngredientsBtn = document.getElementById('voiceIngredientsBtn');
+    const difficultyBtns = document.querySelectorAll('.difficulty-btn');
+    const timeOptions = document.querySelectorAll('.time-options button');
+    
+    // Toggle panel de filtros
+    [filtersToggle, showFilters].forEach(btn => {
+        btn?.addEventListener('click', toggleFiltersPanel);
+    });
+    
+    closeFilters?.addEventListener('click', toggleFiltersPanel);
+    
+    // Aplicar filtros
+    applyFilters?.addEventListener('click', applyAllFilters);
+    
+    // Limpiar filtros
+    clearFilters?.addEventListener('click', clearAllFilters);
+    
+    // Actualizar display del tiempo
+    timeFilter?.addEventListener('input', updateTimeDisplay);
+    
+    // Botones de tiempo rápido
+    timeOptions?.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const time = parseInt(this.dataset.time);
+            document.getElementById('timeFilter').value = time;
+            updateTimeDisplay();
         });
     });
     
-    // Mejorar experiencia táctil en botones
-    const buttons = document.querySelectorAll('.btn, .btn-favorite, .btn-timer, .btn-view');
-    buttons.forEach(button => {
-        button.addEventListener('touchstart', function() {
-            this.style.transform = 'scale(0.98)';
-        });
-        
-        button.addEventListener('touchend', function() {
-            this.style.transform = 'scale(1)';
+    // Ingredientes con Enter
+    ingredientsInput?.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            addIngredientTag(this.value.trim());
+            this.value = '';
+        }
+    });
+    
+    // Dificultad
+    difficultyBtns?.forEach(btn => {
+        btn.addEventListener('click', function() {
+            difficultyBtns.forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
         });
     });
+    
+    // Voz para ingredientes
+    setupVoiceIngredients(voiceIngredientsBtn);
+}
+
+function toggleFiltersPanel() {
+    const panel = document.getElementById('filtersPanel');
+    panel.classList.toggle('active');
+    
+    // Crear overlay si no existe
+    let overlay = document.querySelector('.filters-overlay');
+    if (!overlay) {
+        overlay = document.createElement('div');
+        overlay.className = 'filters-overlay';
+        overlay.addEventListener('click', toggleFiltersPanel);
+        document.body.appendChild(overlay);
+    }
+    overlay.classList.toggle('active');
+}
+
+function updateTimeDisplay() {
+    const timeValue = document.getElementById('timeFilter').value;
+    document.getElementById('currentTime').textContent = `Tengo ${timeValue} minutos`;
+}
+
+function addIngredientTag(ingredient) {
+    if (!ingredient) return;
+    
+    const tagsContainer = document.getElementById('ingredientsTags');
+    const tag = document.createElement('div');
+    tag.className = 'ingredient-tag';
+    tag.innerHTML = `
+        ${ingredient}
+        <button onclick="this.parentElement.remove()">&times;</button>
+    `;
+    tagsContainer.appendChild(tag);
+}
+
+function setupVoiceIngredients(button) {
+    if (!button) return;
+    
+    if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+        const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+        recognition.continuous = false;
+        recognition.interimResults = false;
+        recognition.lang = 'es-ES';
+        
+        recognition.onstart = function() {
+            button.classList.add('voice-listening');
+            showNotification('🎤 Dime los ingredientes que tienes...', 'info');
+        };
+        
+        recognition.onresult = function(event) {
+            const transcript = event.results[0][0].transcript;
+            const ingredients = transcript.toLowerCase().split(/ y |,|\.| /).filter(i => i.length > 2);
+            
+            ingredients.forEach(ingredient => {
+                addIngredientTag(ingredient.trim());
+            });
+            
+            button.classList.remove('voice-listening');
+            showNotification(`✅ Ingredientes agregados: ${ingredients.join(', ')}`, 'success');
+        };
+        
+        recognition.onerror = function(event) {
+            console.error('Error en reconocimiento de voz:', event.error);
+            button.classList.remove('voice-listening');
+            showNotification('❌ Error en reconocimiento de voz', 'danger');
+        };
+        
+        button.addEventListener('click', function() {
+            recognition.start();
+        });
+    } else {
+        button.style.display = 'none';
+    }
+}
+
+function applyAllFilters() {
+    const maxTime = parseInt(document.getElementById('timeFilter').value);
+    const difficulty = document.querySelector('.difficulty-btn.active').dataset.difficulty;
+    const ingredientTags = Array.from(document.querySelectorAll('.ingredient-tag'))
+        .map(tag => tag.textContent.replace('×', '').trim().toLowerCase());
+    
+    // Filtrar recetas
+    const recipes = document.querySelectorAll('.recipe-card');
+    let visibleCount = 0;
+    
+    recipes.forEach(recipe => {
+        const recipeTime = parseInt(recipe.dataset.time);
+        const recipeDifficulty = recipe.dataset.difficulty;
+        const recipeIngredients = recipe.dataset.ingredients?.split(',') || [];
+        
+        const timeMatch = recipeTime <= maxTime;
+        const difficultyMatch = difficulty === 'all' || recipeDifficulty === difficulty;
+        const ingredientsMatch = ingredientTags.length === 0 || 
+            ingredientTags.every(tag => recipeIngredients.some(ing => ing.includes(tag)));
+        
+        if (timeMatch && difficultyMatch && ingredientsMatch) {
+            recipe.style.display = 'flex';
+            visibleCount++;
+        } else {
+            recipe.style.display = 'none';
+        }
+    });
+    
+    toggleFiltersPanel();
+    showNotification(`🔍 Mostrando ${visibleCount} recetas con los filtros aplicados`, 'success');
+}
+
+function clearAllFilters() {
+    // Restablecer tiempo
+    document.getElementById('timeFilter').value = 240;
+    updateTimeDisplay();
+    
+    // Restablecer dificultad
+    document.querySelectorAll('.difficulty-btn').forEach(btn => {
+        btn.classList.remove('active');
+        if (btn.dataset.difficulty === 'all') {
+            btn.classList.add('active');
+        }
+    });
+    
+    // Limpiar ingredientes
+    document.getElementById('ingredientsTags').innerHTML = '';
+    document.getElementById('ingredientsInput').value = '';
+    
+    // Mostrar todas las recetas
+    document.querySelectorAll('.recipe-card').forEach(recipe => {
+        recipe.style.display = 'flex';
+    });
+    
+    showNotification('✨ Filtros limpiados - Mostrando todas las recetas', 'info');
 }
 
 // Modo oscuro
@@ -375,16 +729,10 @@ function setupSmoothScroll() {
                     // Actualizar navegación activa
                     updateActiveNavigation(targetId);
                     
-                    // Scroll suave
                     targetSection.scrollIntoView({
                         behavior: 'smooth',
                         block: 'start'
                     });
-                    
-                    // En móviles, cerrar cualquier menú abierto
-                    if (window.innerWidth < 768) {
-                        document.querySelector('nav').classList.remove('menu-open');
-                    }
                 }
             }
         });
@@ -405,7 +753,7 @@ function setupActiveNavigation() {
             }
         });
     }, {
-        threshold: 0.3,
+        threshold: 0.5,
         rootMargin: '-20% 0px -20% 0px'
     });
     
@@ -459,16 +807,6 @@ function setupSearch() {
         if (e.key === 'Enter') {
             performSearch();
         }
-    });
-    
-    // Para móviles: mejorar experiencia táctil
-    searchBtn.addEventListener('touchstart', function() {
-        this.style.transform = 'scale(0.95)';
-    });
-    
-    searchBtn.addEventListener('touchend', function() {
-        this.style.transform = 'scale(1)';
-        performSearch();
     });
 }
 
@@ -528,10 +866,8 @@ function showSearchResults(results, query) {
         <div class="search-results-list">
             ${results.map(result => `
                 <div class="search-result-item" onclick="viewRecipe('${result.id}')">
-                    <div>
-                        <h3>${result.title}</h3>
-                        <p>${getRegionName(result.section)}</p>
-                    </div>
+                    <h3>${result.title}</h3>
+                    <p>${getRegionName(result.section)}</p>
                     <i class="fas fa-chevron-right"></i>
                 </div>
             `).join('')}
@@ -590,16 +926,6 @@ function setupVoiceSearch() {
                 recognition.start();
             }
         });
-        
-        // Soporte táctil para móviles
-        voiceBtn.addEventListener('touchstart', function(e) {
-            e.preventDefault();
-            if (isListening) {
-                recognition.stop();
-            } else {
-                recognition.start();
-            }
-        });
     } else {
         // El navegador no soporta reconocimiento de voz
         voiceBtn.style.display = 'none';
@@ -616,16 +942,8 @@ function setupModal() {
         modal.style.display = 'none';
     });
     
-    // Cerrar modal al tocar fuera del contenido
-    modal.addEventListener('click', function(event) {
+    window.addEventListener('click', function(event) {
         if (event.target === modal) {
-            modal.style.display = 'none';
-        }
-    });
-    
-    // Cerrar modal con tecla ESC
-    document.addEventListener('keydown', function(event) {
-        if (event.key === 'Escape') {
             modal.style.display = 'none';
         }
     });
@@ -733,23 +1051,19 @@ function showNotification(message, type = 'info') {
     notification.textContent = message;
     notification.style.cssText = `
         position: fixed;
-        top: 100px;
-        right: 10px;
-        left: 10px;
+        top: 120px;
+        right: 20px;
         background: ${type === 'success' ? 'var(--success)' : 
                      type === 'warning' ? 'var(--warning)' : 
                      type === 'danger' ? 'var(--danger)' : 'var(--primary)'};
         color: white;
-        padding: 1rem;
+        padding: 1rem 1.5rem;
         border-radius: 10px;
         box-shadow: var(--shadow);
         z-index: 1000;
         animation: slideInRight 0.3s ease;
-        max-width: 400px;
-        margin: 0 auto;
+        max-width: 300px;
         font-weight: 500;
-        text-align: center;
-        font-size: 0.9rem;
     `;
     
     document.body.appendChild(notification);
@@ -806,6 +1120,54 @@ style.textContent = `
             transform: translateY(0);
         }
     }
+    
+    /* Estilos para resultados de búsqueda */
+    .search-results-header {
+        text-align: center;
+        margin-bottom: 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 2px solid var(--primary-light);
+    }
+    
+    .search-results-list {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .search-result-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem;
+        background: var(--light);
+        border-radius: var(--border-radius);
+        cursor: pointer;
+        transition: var(--transition);
+        border: 2px solid transparent;
+    }
+    
+    .search-result-item:hover {
+        border-color: var(--primary);
+        transform: translateY(-3px);
+        box-shadow: var(--shadow-hover);
+    }
+    
+    .search-result-item h3 {
+        margin-bottom: 0.5rem;
+        color: var(--primary);
+    }
+    
+    .search-result-item p {
+        margin-bottom: 0;
+        color: var(--gray);
+        font-size: 0.9rem;
+    }
+    
+    .search-result-item i {
+        color: var(--primary);
+        font-size: 1.2rem;
+    }
 `;
 document.head.appendChild(style);
 
@@ -834,28 +1196,6 @@ function filterByDifficulty(difficulty) {
     });
 }
 
-// Detectar dispositivo móvil
-function isMobileDevice() {
-    return (typeof window.orientation !== "undefined") || (navigator.userAgent.indexOf('IEMobile') !== -1);
-}
-
-// Optimizar para dispositivos táctiles
-if (isMobileDevice()) {
-    document.body.classList.add('mobile-device');
-    
-    // Mejorar rendimiento en móviles
-    const styles = document.createElement('style');
-    styles.textContent = `
-        .recipe-card {
-            transform: translateZ(0);
-        }
-        .modal-content {
-            -webkit-overflow-scrolling: touch;
-        }
-    `;
-    document.head.appendChild(styles);
-}
-
 // Exportar funciones para uso global
 window.toggleFavorite = toggleFavorite;
 window.startTimer = startTimer;
@@ -866,5 +1206,9 @@ window.viewRecipe = viewRecipe;
 window.searchRecipes = searchRecipes;
 window.filterByRegion = filterByRegion;
 window.filterByDifficulty = filterByDifficulty;
+window.addIngredientTag = addIngredientTag;
+window.toggleFiltersPanel = toggleFiltersPanel;
+window.applyAllFilters = applyAllFilters;
+window.clearAllFilters = clearAllFilters;
 
 console.log('✅ ¡Sabores Ancestrales Perú cargado correctamente!');
