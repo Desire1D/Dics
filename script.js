@@ -15,7 +15,7 @@ const regionMusic = {
         {
             title: "Marinera Norteña",
             artist: "Música Criolla Peruana",
-            src: "Phonk.mp3", // Placeholder
+            src: "phonk.mp3", // Placeholder
             region: "Costa"
         },
         {
