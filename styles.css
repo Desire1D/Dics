@@ -231,35 +231,43 @@ header {
     transform: scale(1.1);
 }
 
-/* Navegación */
+/* Navegación - MEJORADO PARA MÓVIL */
 nav {
     background: var(--light);
     box-shadow: var(--shadow);
     position: sticky;
     top: 80px;
     z-index: 999;
+    padding: 0.5rem 0;
 }
 
 .nav-container {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1rem 0;
+    padding: 0.5rem 0;
+    flex-wrap: wrap;
+    gap: 1rem;
 }
 
 .nav-links {
     display: flex;
-    gap: 2rem;
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    flex: 1;
 }
 
 .nav-link {
     font-weight: 600;
-    padding: 0.5rem 1rem;
+    padding: 0.8rem 1.2rem;
     border-radius: 50px;
     transition: var(--transition);
     display: flex;
     align-items: center;
     gap: 0.5rem;
+    white-space: nowrap;
+    font-size: 0.95rem;
 }
 
 .nav-link:hover {
@@ -276,12 +284,15 @@ nav {
     display: flex;
     align-items: center;
     gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
 }
 
-/* Barra de búsqueda */
+/* Barra de búsqueda - MEJORADA PARA MÓVIL */
 .search-container {
     display: flex;
     align-items: center;
+    min-width: 250px;
 }
 
 .search-box {
@@ -293,6 +304,8 @@ nav {
     box-shadow: var(--shadow);
     border: 2px solid transparent;
     transition: var(--transition);
+    width: 100%;
+    max-width: 400px;
 }
 
 .search-box:focus-within {
@@ -303,8 +316,10 @@ nav {
     border: none;
     padding: 0.5rem 1rem;
     outline: none;
-    width: 250px;
+    flex: 1;
+    min-width: 120px;
     background: transparent;
+    font-size: 0.9rem;
 }
 
 .search-box button {
@@ -319,6 +334,7 @@ nav {
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-shrink: 0;
 }
 
 .search-box button:hover {
@@ -339,6 +355,7 @@ nav {
     display: flex;
     align-items: center;
     gap: 0.5rem;
+    white-space: nowrap;
 }
 
 .filters-btn:hover {
@@ -433,6 +450,8 @@ nav {
     justify-content: space-between;
     align-items: center;
     margin-top: 0.5rem;
+    flex-wrap: wrap;
+    gap: 0.5rem;
 }
 
 #currentTime {
@@ -443,6 +462,7 @@ nav {
 .time-options {
     display: flex;
     gap: 0.5rem;
+    flex-wrap: wrap;
 }
 
 .time-options button {
@@ -1146,7 +1166,11 @@ footer {
     animation: fadeIn 0.8s ease forwards;
 }
 
-/* Responsive */
+/* =========================================== */
+/* MEJORAS RESPONSIVE PARA MÓVILES - ACTUALIZADO */
+/* =========================================== */
+
+/* Tablets */
 @media (max-width: 992px) {
     h1 {
         font-size: 3rem;
@@ -1162,20 +1186,44 @@ footer {
     
     .recipes-grid {
         grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 2rem;
     }
     
     .nav-container {
         flex-direction: column;
-        gap: 1.5rem;
+        gap: 1.2rem;
+        padding: 0.8rem 0;
+    }
+    
+    .nav-links {
+        gap: 0.8rem;
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .nav-link {
+        padding: 0.7rem 1rem;
+        font-size: 0.9rem;
     }
     
     .nav-right {
         width: 100%;
         justify-content: center;
+        gap: 1rem;
+    }
+    
+    .search-container {
+        width: 100%;
+        max-width: 400px;
+    }
+    
+    .search-box {
+        width: 100%;
     }
     
     .search-box input {
-        width: 200px;
+        width: 100%;
+        min-width: auto;
     }
     
     .filters-panel {
@@ -1189,46 +1237,135 @@ footer {
     }
 }
 
+/* Móviles */
 @media (max-width: 768px) {
     .header-content {
         flex-direction: column;
         gap: 1rem;
         text-align: center;
+        padding: 1rem 0;
+    }
+    
+    .logo {
+        justify-content: center;
+        text-align: center;
+    }
+    
+    .logo-text h1 {
+        font-size: 1.6rem;
+    }
+    
+    .header-actions {
+        gap: 1rem;
+    }
+    
+    .mode-btn, .music-btn {
+        width: 45px;
+        height: 45px;
+        font-size: 1.1rem;
+    }
+    
+    /* Navegación mejorada para móviles */
+    nav {
+        top: 70px;
+        padding: 0.5rem 0;
+    }
+    
+    .nav-container {
+        gap: 1rem;
+        padding: 0.5rem 0;
     }
     
     .nav-links {
-        flex-wrap: wrap;
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.5rem;
+        width: 100%;
+    }
+    
+    .nav-link {
+        padding: 0.8rem 0.5rem;
+        font-size: 0.85rem;
         justify-content: center;
+        text-align: center;
+        border-radius: 8px;
+        background: rgba(255,255,255,0.1);
+        min-height: 44px; /* Tamaño táctil mínimo */
+    }
+    
+    .nav-link i {
+        font-size: 0.9rem;
+        min-width: 20px;
+    }
+    
+    .nav-right {
+        flex-direction: column;
+        width: 100%;
+        gap: 0.8rem;
+    }
+    
+    .search-container {
+        width: 100%;
+        order: -1; /* Mover la búsqueda arriba */
+    }
+    
+    .search-box {
+        width: 100%;
+        max-width: none;
     }
     
     .mobile-only {
         display: flex;
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .filters-btn {
+        width: 100%;
+        justify-content: center;
+        padding: 0.9rem 1.5rem;
     }
     
     .hero {
-        padding: 150px 0 80px;
+        padding: 140px 0 80px;
     }
     
     .hero h1 {
-        font-size: 2.5rem;
+        font-size: 2.2rem;
     }
     
     .hero p {
         font-size: 1.1rem;
+        padding: 0 1rem;
+    }
+    
+    .hero-buttons {
+        flex-direction: column;
+        align-items: center;
+        gap: 0.8rem;
+    }
+    
+    .hero-buttons .btn {
+        width: 100%;
+        max-width: 250px;
+        justify-content: center;
     }
     
     .recipes-grid {
         grid-template-columns: 1fr;
+        gap: 1.5rem;
     }
     
     .card-actions {
         flex-direction: column;
+        gap: 0.8rem;
     }
     
     #timer {
         bottom: 1rem;
         right: 1rem;
         left: 1rem;
+        min-width: auto;
     }
     
     .footer-content {
@@ -1245,59 +1382,122 @@ footer {
     .filters-panel {
         width: 100%;
         right: -100%;
-    }
-    
-    .search-box {
-        width: 100%;
-    }
-    
-    .search-box input {
-        width: 100%;
-    }
-}
-
-@media (max-width: 576px) {
-    h1 {
-        font-size: 2.5rem;
-    }
-    
-    h2 {
-        font-size: 2rem;
-    }
-    
-    section {
-        padding: 60px 0;
-    }
-    
-    .hero h1 {
-        font-size: 2rem;
-    }
-    
-    .hero-buttons {
-        flex-direction: column;
-        align-items: center;
-    }
-    
-    .hero-buttons .btn {
-        width: 100%;
-        max-width: 250px;
+        padding: 1.5rem;
     }
     
     .music-player {
         bottom: 1rem;
         left: 1rem;
         right: 1rem;
+        min-width: auto;
     }
     
     .player-content {
         flex-direction: column;
         text-align: center;
+        gap: 0.8rem;
     }
     
     .player-info {
         flex-direction: column;
         text-align: center;
+        gap: 0.8rem;
     }
+}
+
+/* Móviles pequeños */
+@media (max-width: 480px) {
+    h1 {
+        font-size: 2.2rem;
+    }
+    
+    h2 {
+        font-size: 1.8rem;
+    }
+    
+    h3 {
+        font-size: 1.5rem;
+    }
+    
+    section {
+        padding: 60px 0;
+    }
+    
+    .container {
+        padding: 0 15px;
+    }
+    
+    .hero h1 {
+        font-size: 1.8rem;
+    }
+    
+    .hero p {
+        font-size: 1rem;
+    }
+    
+    /* Navegación para móviles muy pequeños */
+    .nav-links {
+        grid-template-columns: 1fr;
+        gap: 0.3rem;
+    }
+    
+    .nav-link {
+        padding: 0.9rem 0.5rem;
+        font-size: 0.9rem;
+        min-height: 48px;
+    }
+    
+    .search-box {
+        padding: 0.4rem;
+    }
+    
+    .search-box input {
+        padding: 0.5rem 0.8rem;
+        font-size: 0.9rem;
+    }
+    
+    .search-box button {
+        width: 38px;
+        height: 38px;
+    }
+    
+    .recipe-content {
+        padding: 1.2rem;
+    }
+    
+    .recipe-meta {
+        gap: 1rem;
+    }
+    
+    .recipe-meta span {
+        font-size: 0.8rem;
+    }
+    
+    .card-header {
+        height: 180px;
+    }
+    
+    .music-player {
+        bottom: 0.5rem;
+        left: 0.5rem;
+        right: 0.5rem;
+    }
+    
+    .player-content {
+        padding: 0.8rem;
+    }
+}
+
+/* Mejorar contraste en modo oscuro para móviles */
+[data-theme="dark"] .nav-link {
+    background: rgba(255,255,255,0.05);
+    color: var(--light);
+}
+
+[data-theme="dark"] .nav-link:hover,
+[data-theme="dark"] .nav-link.active {
+    background: var(--primary);
+    color: white;
 }
 
 /* Utilidades */
