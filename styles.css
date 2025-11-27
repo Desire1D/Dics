@@ -519,34 +519,6 @@ nav {
     font-size: 0.8rem;
 }
 
-/* Filtro de dificultad */
-.difficulty-filter {
-    display: flex;
-    gap: 0.5rem;
-    flex-wrap: wrap;
-}
-
-.difficulty-btn {
-    padding: 0.6rem 1.2rem;
-    border: 2px solid var(--gray-light);
-    background: white;
-    border-radius: 25px;
-    cursor: pointer;
-    transition: var(--transition);
-    font-weight: 500;
-}
-
-.difficulty-btn.active {
-    background: var(--primary);
-    color: white;
-    border-color: var(--primary);
-}
-
-.difficulty-btn:hover:not(.active) {
-    border-color: var(--primary);
-    color: var(--primary);
-}
-
 .filter-actions {
     display: flex;
     gap: 1rem;
@@ -601,8 +573,14 @@ nav {
     font-size: 1.2rem;
 }
 
+.track-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+}
+
 .track-info h4 {
-    margin-bottom: 0.2rem;
+    margin-bottom: 0;
     color: var(--primary);
 }
 
