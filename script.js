@@ -13,8 +13,8 @@ let isMusicPlaying = false;
 const regionMusic = {
     costa: [
         {
-            title: "Marinera Norteña",
-            artist: "Música Criolla Peruana",
+            title: "Musica endemica de la costa",
+            artist: "Deyvis",
             src: "phonk.mp3", // Placeholder
             region: "Costa"
         },
