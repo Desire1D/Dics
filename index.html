@@ -22,6 +22,9 @@
                     </div>
                 </div>
                 <div class="header-actions">
+                    <button id="musicToggle" class="music-btn">
+                        <i class="fas fa-music"></i>
+                    </button>
                     <button id="darkModeToggle" class="mode-btn">
                         <i class="fas fa-moon"></i>
                     </button>
@@ -35,23 +38,80 @@
         <div class="container">
             <div class="nav-container">
                 <ul class="nav-links">
-                    <li><a href="#costa" class="nav-link"><i class="fas fa-fish"></i> Costa</a></li>
-                    <li><a href="#sierra" class="nav-link"><i class="fas fa-mountain"></i> Sierra</a></li>
-                    <li><a href="#selva" class="nav-link"><i class="fas fa-leaf"></i> Selva</a></li>
+                    <li><a href="#costa" class="nav-link" data-region="costa"><i class="fas fa-fish"></i> Costa</a></li>
+                    <li><a href="#sierra" class="nav-link" data-region="sierra"><i class="fas fa-mountain"></i> Sierra</a></li>
+                    <li><a href="#selva" class="nav-link" data-region="selva"><i class="fas fa-leaf"></i> Selva</a></li>
                     <li><a href="#favoritos" class="nav-link"><i class="fas fa-heart"></i> Favoritos</a></li>
                 </ul>
                 
-                <!-- Barra de búsqueda -->
-                <div class="search-container">
-                    <div class="search-box">
-                        <input type="text" id="searchInput" placeholder="Buscar recetas...">
-                        <button id="searchBtn"><i class="fas fa-search"></i></button>
-                        <button id="voiceSearchBtn"><i class="fas fa-microphone"></i></button>
+                <div class="nav-right">
+                    <!-- Botón Filtros para móvil -->
+                    <button id="filtersToggle" class="filters-btn mobile-only">
+                        <i class="fas fa-filter"></i> Filtros
+                    </button>
+
+                    <!-- Barra de búsqueda -->
+                    <div class="search-container">
+                        <div class="search-box">
+                            <input type="text" id="searchInput" placeholder="Buscar recetas...">
+                            <button id="searchBtn"><i class="fas fa-search"></i></button>
+                            <button id="voiceSearchBtn"><i class="fas fa-microphone"></i></button>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </nav>
+
+    <!-- Panel de Filtros -->
+    <div id="filtersPanel" class="filters-panel">
+        <div class="filters-header">
+            <h3><i class="fas fa-filter"></i> Filtros Avanzados</h3>
+            <button class="close-filters">&times;</button>
+        </div>
+        
+        <div class="filter-group">
+            <h4><i class="fas fa-clock"></i> Tiempo de Preparación</h4>
+            <div class="time-filter">
+                <input type="range" id="timeFilter" min="15" max="240" value="240" step="15">
+                <div class="time-labels">
+                    <span id="currentTime">Tengo 240 minutos</span>
+                    <span class="time-options">
+                        <button data-time="30">30min</button>
+                        <button data-time="60">60min</button>
+                        <button data-time="90">90min</button>
+                        <button data-time="240">Todos</button>
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <div class="filter-group">
+            <h4><i class="fas fa-list"></i> Ingredientes Disponibles</h4>
+            <div class="ingredients-filter">
+                <div class="ingredients-input">
+                    <input type="text" id="ingredientsInput" placeholder="Ej: pollo, papa, arroz...">
+                    <button id="voiceIngredientsBtn"><i class="fas fa-microphone"></i></button>
+                </div>
+                <div class="ingredients-tags" id="ingredientsTags"></div>
+            </div>
+        </div>
+
+        <div class="filter-group">
+            <h4><i class="fas fa-signal"></i> Dificultad</h4>
+            <div class="difficulty-filter">
+                <button class="difficulty-btn active" data-difficulty="all">Todas</button>
+                <button class="difficulty-btn" data-difficulty="facil">Fácil</button>
+                <button class="difficulty-btn" data-difficulty="medio">Medio</button>
+                <button class="difficulty-btn" data-difficulty="dificil">Tradicional</button>
+            </div>
+        </div>
+
+        <div class="filter-actions">
+            <button id="applyFilters" class="btn btn-primary">Aplicar Filtros</button>
+            <button id="clearFilters" class="btn btn-secondary">Limpiar</button>
+        </div>
+    </div>
 
     <!-- Hero Section -->
     <section class="hero">
@@ -61,9 +121,32 @@
             <div class="hero-buttons fade-in">
                 <a href="#costa" class="btn btn-primary"><i class="fas fa-utensils"></i> Explorar Recetas</a>
                 <a href="#favoritos" class="btn btn-secondary"><i class="fas fa-heart"></i> Mis Favoritos</a>
+                <button id="showFilters" class="btn btn-secondary"><i class="fas fa-filter"></i> Filtros Avanzados</button>
             </div>
         </div>
     </section>
+
+    <!-- Player de Música -->
+    <div id="musicPlayer" class="music-player hidden">
+        <div class="player-content">
+            <div class="player-info">
+                <div class="album-art">
+                    <i class="fas fa-music"></i>
+                </div>
+                <div class="track-info">
+                    <h4 id="currentTrack">Selecciona una región</h4>
+                    <p id="currentRegion">Música Tradicional Peruana</p>
+                </div>
+            </div>
+            <div class="player-controls">
+                <button id="prevTrack"><i class="fas fa-step-backward"></i></button>
+                <button id="playPause"><i class="fas fa-play"></i></button>
+                <button id="nextTrack"><i class="fas fa-step-forward"></i></button>
+                <button id="closePlayer"><i class="fas fa-times"></i></button>
+            </div>
+            <audio id="audioPlayer" preload="metadata"></audio>
+        </div>
+    </div>
 
     <!-- Sección Costa -->
     <section id="costa" class="recipe-section">
@@ -72,11 +155,14 @@
                 <span class="region-badge costa-badge">Costa Peruana</span>
                 <h2>Sabores del Mar</h2>
                 <p>La riqueza del Océano Pacífico se fusiona con técnicas ancestrales para crear platos únicos llenos de sabor y tradición.</p>
+                <button class="region-music-btn" data-region="costa">
+                    <i class="fas fa-play"></i> Escuchar Música Costeña
+                </button>
             </div>
             <div class="recipes-grid">
                 
                 <!-- Ceviche Ancestral -->
-                <div class="recipe-card fade-in" data-time="30" data-difficulty="facil" data-id="ceviche-ancestral">
+                <div class="recipe-card fade-in" data-time="30" data-difficulty="facil" data-id="ceviche-ancestral" data-ingredients="pescado,limon,aji,cebolla,kion,algas,maiz">
                     <div class="card-header">
                         <img src="https://pbs.twimg.com/media/G6t9yb6W8AAFwxU?format=png&name=small" alt="Ceviche Ancestral">
                         <div class="card-overlay">
@@ -131,7 +217,7 @@
                 </div>
 
                 <!-- Causa Limeña Prehispánica -->
-                <div class="recipe-card fade-in" data-time="45" data-difficulty="medio" data-id="causa-limeña">
+                <div class="recipe-card fade-in" data-time="45" data-difficulty="medio" data-id="causa-limeña" data-ingredients="papa,aji,atun,palta,huevo,aceituna,lechuga">
                     <div class="card-header">
                         <img src="https://pbs.twimg.com/media/G6t99N1X0AABW6E?format=jpg&name=small" alt="Causa Limeña">
                         <div class="card-overlay">
@@ -196,11 +282,14 @@
                 <span class="region-badge sierra-badge">Sierra Andina</span>
                 <h2>Sabores de los Andes</h2>
                 <p>Los ingredientes milenarios de las alturas andinas se transforman en platos llenos de tradición y energía.</p>
+                <button class="region-music-btn" data-region="sierra">
+                    <i class="fas fa-play"></i> Escuchar Música Andina
+                </button>
             </div>
             <div class="recipes-grid">
                 
                 <!-- Pachamanca Ancestral -->
-                <div class="recipe-card fade-in" data-time="240" data-difficulty="dificil" data-id="pachamanca">
+                <div class="recipe-card fade-in" data-time="240" data-difficulty="dificil" data-id="pachamanca" data-ingredients="cordero,cerdo,pollo,papa,habas,choclo,hierbas,piedras">
                     <div class="card-header">
                         <img src="https://pbs.twimg.com/media/G6t-hFxWMAASnhe?format=jpg&name=small" alt="Pachamanca">
                         <div class="card-overlay">
@@ -256,7 +345,7 @@
                 </div>
 
                 <!-- Olluquito con Charqui -->
-                <div class="recipe-card fade-in" data-time="60" data-difficulty="medio" data-id="olluquito">
+                <div class="recipe-card fade-in" data-time="60" data-difficulty="medio" data-id="olluquito" data-ingredients="olluco,charqui,cebolla,ajo,aji,culantro,papa">
                     <div class="card-header">
                         <img src="https://pbs.twimg.com/media/G6t-lOwXoAAqZKZ?format=jpg&name=small" alt="Olluquito">
                         <div class="card-overlay">
@@ -321,11 +410,14 @@
                 <span class="region-badge selva-badge">Selva Amazónica</span>
                 <h2>Sabores de la Amazonía</h2>
                 <p>La biodiversidad de la selva peruana se manifiesta en platos exóticos llenos de color, aroma y tradición.</p>
+                <button class="region-music-btn" data-region="selva">
+                    <i class="fas fa-play"></i> Escuchar Música Amazónica
+                </button>
             </div>
             <div class="recipes-grid">
                 
                 <!-- Tacacho con Cecina -->
-                <div class="recipe-card fade-in" data-time="40" data-difficulty="medio" data-id="tacacho">
+                <div class="recipe-card fade-in" data-time="40" data-difficulty="medio" data-id="tacacho" data-ingredients="platano,cecina,manteca,chorizo,sal,ajo,hojas">
                     <div class="card-header">
                         <img src="https://pbs.twimg.com/media/G6t-zd_XQAAvU-z?format=jpg&name=small" alt="Tacacho con Cecina">
                         <div class="card-overlay">
@@ -379,7 +471,7 @@
                 </div>
 
                 <!-- Juane de Gallina -->
-                <div class="recipe-card fade-in" data-time="90" data-difficulty="medio" data-id="juane">
+                <div class="recipe-card fade-in" data-time="90" data-difficulty="medio" data-id="juane" data-ingredients="gallina,arroz,huevo,aceituna,pasas,hojas,palillo,hierbas">
                     <div class="card-header">
                         <img src="https://pbs.twimg.com/media/G6t-3rgW4AAdTmm?format=png&name=small" alt="Juane de Gallina">
                         <div class="card-overlay">
