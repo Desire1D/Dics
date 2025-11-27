@@ -37,11 +37,41 @@ document.addEventListener('DOMContentLoaded', function() {
     // Configurar modal
     setupModal();
     
+    // Configurar navegación táctil para móviles
+    setupTouchNavigation();
+    
     // Mostrar mensaje de bienvenida
     setTimeout(() => {
         showNotification('🌄 Bienvenido a Sabores Ancestrales Perú', 'success');
     }, 1000);
 });
+
+// Configurar navegación táctil para móviles
+function setupTouchNavigation() {
+    const navLinks = document.querySelectorAll('.nav-link');
+    
+    navLinks.forEach(link => {
+        link.addEventListener('touchstart', function() {
+            this.style.transform = 'scale(0.95)';
+        });
+        
+        link.addEventListener('touchend', function() {
+            this.style.transform = 'scale(1)';
+        });
+    });
+    
+    // Mejorar experiencia táctil en botones
+    const buttons = document.querySelectorAll('.btn, .btn-favorite, .btn-timer, .btn-view');
+    buttons.forEach(button => {
+        button.addEventListener('touchstart', function() {
+            this.style.transform = 'scale(0.98)';
+        });
+        
+        button.addEventListener('touchend', function() {
+            this.style.transform = 'scale(1)';
+        });
+    });
+}
 
 // Modo oscuro
 function toggleDarkMode() {
@@ -345,10 +375,16 @@ function setupSmoothScroll() {
                     // Actualizar navegación activa
                     updateActiveNavigation(targetId);
                     
+                    // Scroll suave
                     targetSection.scrollIntoView({
                         behavior: 'smooth',
                         block: 'start'
                     });
+                    
+                    // En móviles, cerrar cualquier menú abierto
+                    if (window.innerWidth < 768) {
+                        document.querySelector('nav').classList.remove('menu-open');
+                    }
                 }
             }
         });
@@ -369,7 +405,7 @@ function setupActiveNavigation() {
             }
         });
     }, {
-        threshold: 0.5,
+        threshold: 0.3,
         rootMargin: '-20% 0px -20% 0px'
     });
     
@@ -423,6 +459,16 @@ function setupSearch() {
         if (e.key === 'Enter') {
             performSearch();
         }
+    });
+    
+    // Para móviles: mejorar experiencia táctil
+    searchBtn.addEventListener('touchstart', function() {
+        this.style.transform = 'scale(0.95)';
+    });
+    
+    searchBtn.addEventListener('touchend', function() {
+        this.style.transform = 'scale(1)';
+        performSearch();
     });
 }
 
@@ -482,8 +528,10 @@ function showSearchResults(results, query) {
         <div class="search-results-list">
             ${results.map(result => `
                 <div class="search-result-item" onclick="viewRecipe('${result.id}')">
-                    <h3>${result.title}</h3>
-                    <p>${getRegionName(result.section)}</p>
+                    <div>
+                        <h3>${result.title}</h3>
+                        <p>${getRegionName(result.section)}</p>
+                    </div>
                     <i class="fas fa-chevron-right"></i>
                 </div>
             `).join('')}
@@ -542,6 +590,16 @@ function setupVoiceSearch() {
                 recognition.start();
             }
         });
+        
+        // Soporte táctil para móviles
+        voiceBtn.addEventListener('touchstart', function(e) {
+            e.preventDefault();
+            if (isListening) {
+                recognition.stop();
+            } else {
+                recognition.start();
+            }
+        });
     } else {
         // El navegador no soporta reconocimiento de voz
         voiceBtn.style.display = 'none';
@@ -558,8 +616,16 @@ function setupModal() {
         modal.style.display = 'none';
     });
     
-    window.addEventListener('click', function(event) {
+    // Cerrar modal al tocar fuera del contenido
+    modal.addEventListener('click', function(event) {
         if (event.target === modal) {
+            modal.style.display = 'none';
+        }
+    });
+    
+    // Cerrar modal con tecla ESC
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape') {
             modal.style.display = 'none';
         }
     });
@@ -667,19 +733,23 @@ function showNotification(message, type = 'info') {
     notification.textContent = message;
     notification.style.cssText = `
         position: fixed;
-        top: 120px;
-        right: 20px;
+        top: 100px;
+        right: 10px;
+        left: 10px;
         background: ${type === 'success' ? 'var(--success)' : 
                      type === 'warning' ? 'var(--warning)' : 
                      type === 'danger' ? 'var(--danger)' : 'var(--primary)'};
         color: white;
-        padding: 1rem 1.5rem;
+        padding: 1rem;
         border-radius: 10px;
         box-shadow: var(--shadow);
         z-index: 1000;
         animation: slideInRight 0.3s ease;
-        max-width: 300px;
+        max-width: 400px;
+        margin: 0 auto;
         font-weight: 500;
+        text-align: center;
+        font-size: 0.9rem;
     `;
     
     document.body.appendChild(notification);
@@ -736,54 +806,6 @@ style.textContent = `
             transform: translateY(0);
         }
     }
-    
-    /* Estilos para resultados de búsqueda */
-    .search-results-header {
-        text-align: center;
-        margin-bottom: 2rem;
-        padding-bottom: 1rem;
-        border-bottom: 2px solid var(--primary-light);
-    }
-    
-    .search-results-list {
-        display: flex;
-        flex-direction: column;
-        gap: 1rem;
-    }
-    
-    .search-result-item {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 1rem;
-        background: var(--light);
-        border-radius: var(--border-radius);
-        cursor: pointer;
-        transition: var(--transition);
-        border: 2px solid transparent;
-    }
-    
-    .search-result-item:hover {
-        border-color: var(--primary);
-        transform: translateY(-3px);
-        box-shadow: var(--shadow-hover);
-    }
-    
-    .search-result-item h3 {
-        margin-bottom: 0.5rem;
-        color: var(--primary);
-    }
-    
-    .search-result-item p {
-        margin-bottom: 0;
-        color: var(--gray);
-        font-size: 0.9rem;
-    }
-    
-    .search-result-item i {
-        color: var(--primary);
-        font-size: 1.2rem;
-    }
 `;
 document.head.appendChild(style);
 
@@ -810,6 +832,28 @@ function filterByDifficulty(difficulty) {
             recipe.style.display = 'none';
         }
     });
+}
+
+// Detectar dispositivo móvil
+function isMobileDevice() {
+    return (typeof window.orientation !== "undefined") || (navigator.userAgent.indexOf('IEMobile') !== -1);
+}
+
+// Optimizar para dispositivos táctiles
+if (isMobileDevice()) {
+    document.body.classList.add('mobile-device');
+    
+    // Mejorar rendimiento en móviles
+    const styles = document.createElement('style');
+    styles.textContent = `
+        .recipe-card {
+            transform: translateZ(0);
+        }
+        .modal-content {
+            -webkit-overflow-scrolling: touch;
+        }
+    `;
+    document.head.appendChild(styles);
 }
 
 // Exportar funciones para uso global
