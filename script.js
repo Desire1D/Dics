@@ -58,18 +58,27 @@ const regionMusic = {
 let currentTrackIndex = 0;
 let currentPlaylist = [];
 
-// Función para mejorar navegación en móviles
+// Función para mejorar navegación en móviles - VERSIÓN CORREGIDA
 function setupMobileNavigation() {
     const navLinks = document.querySelector('.nav-links');
-    const navContainer = document.querySelector('.nav-container');
     
-    // Asegurar que la navegación sea responsive
     function handleResize() {
         if (window.innerWidth <= 768) {
-            // En móviles, asegurar que los enlaces sean visibles
+            // En móviles, forzar display flex y scroll horizontal
             navLinks.style.display = 'flex';
-            navLinks.style.overflowX = 'auto';
             navLinks.style.flexWrap = 'nowrap';
+            navLinks.style.overflowX = 'auto';
+            navLinks.style.overflowY = 'hidden';
+            navLinks.style.webkitOverflowScrolling = 'touch';
+            
+            // Asegurar que todos los elementos sean visibles
+            const links = navLinks.querySelectorAll('.nav-link');
+            links.forEach(link => {
+                link.style.display = 'flex';
+                link.style.visibility = 'visible';
+                link.style.opacity = '1';
+                link.style.flexShrink = '0';
+            });
         } else {
             // En desktop, comportamiento normal
             navLinks.style.overflowX = 'visible';
@@ -81,14 +90,17 @@ function setupMobileNavigation() {
     handleResize();
     window.addEventListener('resize', handleResize);
     
-    // Mejorar experiencia táctil
-    navLinks.addEventListener('touchstart', function() {
-        this.style.cursor = 'grabbing';
-    });
-    
-    navLinks.addEventListener('touchend', function() {
-        this.style.cursor = 'grab';
-    });
+    // Forzar visibilidad en carga
+    setTimeout(() => {
+        handleResize();
+        // Asegurar visibilidad después de un breve delay
+        const links = navLinks.querySelectorAll('.nav-link');
+        links.forEach(link => {
+            link.style.display = 'flex';
+            link.style.visibility = 'visible';
+            link.style.opacity = '1';
+        });
+    }, 100);
 }
 
 // Inicializar cuando cargue la página
@@ -101,7 +113,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Cargar favoritos
     loadFavorites();
     
-    // Configurar navegación móvil
+    // Configurar navegación móvil - LLAMADA CORREGIDA
     setupMobileNavigation();
     
     // Configurar el botón de modo oscuro
