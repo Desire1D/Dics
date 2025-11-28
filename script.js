@@ -15,7 +15,7 @@ const regionMusic = {
         {
             title: "Musica endemica de la costa",
             artist: "Deyvis",
-            src: "phonk.mp3",
+            src: "marinera.mp3",
             region: "Costa"
         },
         {
